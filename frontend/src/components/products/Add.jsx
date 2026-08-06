@@ -7,6 +7,7 @@ import { styled } from "@mui/material/styles";
 import FormData from "form-data";
 import axios from "axios";
 import toast from "react-simple-toasts";
+import ImageFilePicker from "../inputs/ImageFilePicker";
 
 const { useState } = require("react");
 
@@ -29,18 +30,6 @@ function Add({ setProducts }) {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [disabled, setDisabled] = useState(false);
-
-  // Handle image file selection and create a preview
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-
-    if (!file) return;
-
-    setImageFile(file);
-
-    // Create a local preview
-    setImagePreview(URL.createObjectURL(file));
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -109,21 +98,10 @@ function Add({ setProducts }) {
             required
             onChange={(e) => setDescription(e.target.value)}
           />
-          <Button
-            component="label"
-            role={undefined}
-            variant="outlined"
-            tabIndex={-1}
-            startIcon={<CloudUploadOutlinedIcon />}
-          >
-            Choisir une image
-            <VisuallyHiddenInput
-              type="file"
-              accept="image/*"
-              required
-              onChange={handleImageChange}
-            />
-          </Button>
+          <ImageFilePicker
+            setImageFile={setImageFile}
+            setImagePreview={setImagePreview}
+          />
           {imagePreview && (
             <img
               src={imagePreview}
