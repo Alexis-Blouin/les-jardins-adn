@@ -115,7 +115,6 @@ function App() {
       .get("http://localhost:8081/products/get")
       .then((res) => {
         setProducts(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -300,7 +299,10 @@ function App() {
         </AppBar>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/produits" element={<List products={products} />} />
+          <Route
+            path="/produits"
+            element={<List products={products} setProducts={setProducts} />}
+          />
           <Route path="/ajouter" element={<Add setProducts={setProducts} />} />
         </Routes>
       </Router>

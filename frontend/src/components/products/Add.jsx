@@ -58,6 +58,7 @@ function Add({ setProducts }) {
         productName: name,
         productDescription: description,
         productImageURL: res.data.productImageURL,
+        productImagePublicId: res.data.productImagePublicId,
       };
       setProducts((prevProducts) => [...prevProducts, newProduct]);
 

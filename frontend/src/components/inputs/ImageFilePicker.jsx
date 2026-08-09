@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
-const { useState } = require("react");
 import { styled } from "@mui/material/styles";
+const { useState } = require("react");
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -16,7 +16,12 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-function ImageFilePicker({ setImageFile, setImagePreview }) {
+function ImageFilePicker({
+  setImageFile,
+  setImagePreview,
+  required = true,
+  setImageModified = () => {},
+}) {
   // Handle image file selection and create a preview
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -27,6 +32,7 @@ function ImageFilePicker({ setImageFile, setImagePreview }) {
 
     // Create a local preview
     setImagePreview(URL.createObjectURL(file));
+    setImageModified(true);
   };
 
   return (
@@ -41,7 +47,7 @@ function ImageFilePicker({ setImageFile, setImagePreview }) {
       <VisuallyHiddenInput
         type="file"
         accept="image/*"
-        required
+        required={required}
         onChange={handleImageChange}
       />
     </Button>

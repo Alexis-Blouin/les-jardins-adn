@@ -12,17 +12,26 @@ import axios from "axios";
 const { useState, useEffect } = require("react");
 
 function Modify({ product, setProducts, open, handleClose }) {
+  const [productId, setProductId] = useState(null);
   const [name, setName] = useState("");
+  const [originalName, setOriginalName] = useState("");
   const [description, setDescription] = useState("");
+  const [productImageURL, setProductImageURL] = useState("");
+  const [productImagePublicId, setProductImagePublicId] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const [imageModified, setImageModified] = useState(false);
 
   // Update form fields when the product changes
   useEffect(() => {
     if (product) {
+      setProductId(product.productId);
       setName(product.productName);
+      setOriginalName(product.productName);
       setDescription(product.productDescription);
+      setProductImageURL(product.productImageURL);
+      setProductImagePublicId(product.productImagePublicId);
       setImagePreview(product.productImageURL);
     }
   }, [product]);
@@ -34,13 +43,19 @@ function Modify({ product, setProducts, open, handleClose }) {
 
     // Create a FormData object to send the product data, including the image file
     const formData = new FormData();
+    formData.append("productId", productId); // Include the product ID for updating
     formData.append("productName", name);
     formData.append("productDescription", description);
-    formData.append("productImage", imageFile, imageFile.name);
+    formData.append("productImageURL", productImageURL);
+    formData.append("productImagePublicId", productImagePublicId); // Include the current image public id for deletion
+
+    if (imageModified) {
+      formData.append("productImage", imageFile, imageFile.name);
+    }
 
     try {
-      const res = await axios.post(
-        "http://localhost:8081/products/add",
+      const res = await axios.patch(
+        "http://localhost:8081/products/modify",
         formData,
         {
           headers: {
@@ -49,16 +64,23 @@ function Modify({ product, setProducts, open, handleClose }) {
         },
       );
 
-      // Update the products list in the parent component with the newly added product
-      const newProduct = {
-        productId: res.data.productId,
+      // Modify the products list in the parent component with the newly added product
+      const modifiedProduct = {
+        productId: productId,
         productName: name,
         productDescription: description,
         productImageURL: res.data.productImageURL,
+        productImagePublicId: res.data.productImagePublicId,
       };
-      setProducts((prevProducts) => [...prevProducts, newProduct]);
+      setProducts((prevProducts) =>
+        prevProducts.map((p) =>
+          p.productId === product.productId ? modifiedProduct : p,
+        ),
+      );
 
       toast(res.data.message, { theme: "success" });
+
+      handleClose(); // Close the dialog after successful submission
 
       // Reset the form fields and state after successful submission
       setDisabled(false);
@@ -68,17 +90,17 @@ function Modify({ product, setProducts, open, handleClose }) {
       setImagePreview(null);
     } catch (err) {
       console.error(err);
-      toast("Erreur lors de l'ajout du produit.", { theme: "failure" });
+      toast("Erreur lors de la modification du produit.", { theme: "failure" });
       setDisabled(false);
     }
   };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Modifier {name}</DialogTitle>
+      <DialogTitle>Modifier {originalName}</DialogTitle>
       <DialogContent style={{ paddingTop: "5px" }}>
         <Box sx={{ p: 2, maxWidth: "sm", margin: "0 auto" }}>
-          <form id="addForm" onSubmit={handleSubmit}>
+          <form id="modifyForm" onSubmit={handleSubmit}>
             <Stack direction="column" spacing={2}>
               <TextField
                 id="name"
@@ -101,6 +123,8 @@ function Modify({ product, setProducts, open, handleClose }) {
               <ImageFilePicker
                 setImageFile={setImageFile}
                 setImagePreview={setImagePreview}
+                required={false}
+                setImageModified={setImageModified}
               />
               {imagePreview && (
                 <img
@@ -120,7 +144,7 @@ function Modify({ product, setProducts, open, handleClose }) {
         <Button onClick={handleClose}>Annuler</Button>
         <Button
           type="submit"
-          form="editForm"
+          form="modifyForm"
           color="primary"
           variant="contained"
         >

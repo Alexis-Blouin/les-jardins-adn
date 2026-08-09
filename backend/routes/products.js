@@ -20,7 +20,7 @@ const upload = multer({ storage: multer.memoryStorage() }); // Use memory storag
 router.get("/get", async (req, res) => {
   try {
     const [rows] = await db.query(
-      `select productId, productName, productDescription, productImageURL
+      `select productId, productName, productDescription, productImageURL, productImagePublicId
       from products`,
     );
     res.json(rows);
@@ -59,19 +59,26 @@ router.post("/add", upload.single("productImage"), async (req, res) => {
         );
         streamifier.createReadStream(req.file.buffer).pipe(stream);
       });
-      // Get the secure URL of the uploaded image
+      // Get the secure URL and public id of the uploaded image
       const productImageURL = result.secure_url;
+      const productImagePublicId = result.public_id;
 
       // Insert the product into the database with the image URL
       const [productsResult] = await db.query(
-        `insert into products (productName, productDescription, productImageURL) values (?, ?, ?)`,
-        [productName, productDescription, productImageURL],
+        `insert into products (productName, productDescription, productImageURL, productImagePublicId) values (?, ?, ?, ?)`,
+        [
+          productName,
+          productDescription,
+          productImageURL,
+          productImagePublicId,
+        ],
       );
 
       // Return the newly added product's ID and image URL
       res.json({
         productId: productsResult.insertId,
         productImageURL: productImageURL,
+        productImagePublicId: productImagePublicId,
         success: true,
         message: "Produit ajouté avec succès!",
       });
@@ -82,29 +89,70 @@ router.post("/add", upload.single("productImage"), async (req, res) => {
   }
 });
 
-router.patch("/update", async (req, res) => {
+router.patch("/modify", upload.single("productImage"), async (req, res) => {
   try {
-    const noteId = req.body.noteId;
-    const noteTitle = req.body.noteTitle;
-    const noteContent = req.body.noteContent;
-    const noteExample = req.body.noteExample;
+    const productId = req.body.productId;
+    const productName = req.body.productName;
+    const productDescription = req.body.productDescription;
+    const productOldImageURL = req.body.productImageURL;
+    const productOldImagePublicId = req.body.productImagePublicId;
+    const productImage = req.file ?? null;
 
-    const note = await selectOneProduct(noteTitle, req.accountId);
-    if (note && note.noteId !== noteId) {
-      res.json({
-        success: false,
-        message: "Note with the same title already exists",
-      });
-    } else {
-      await db.query(
-        `update notes set noteTitle = ?, noteContent = ?, noteExample = ? where noteId = ? and accountId = ?`,
-        [noteTitle, noteContent, noteExample, noteId, req.accountId],
-      );
-      res.json({
-        success: true,
-        message: "Note updated successfully",
+    // const product = await selectOneProduct(productName);
+    // if (product && product.productId !== productId) {
+    //   res.json({
+    //     success: false,
+    //     message: "Product with the same name already exists",
+    //   });
+    // } else {
+    let result = null;
+
+    if (productImage) {
+      // Upload the new image to Cloudinary
+      result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: "products",
+          },
+          (err, result) => {
+            if (err) reject(err);
+            else resolve(result);
+          },
+        );
+
+        streamifier.createReadStream(productImage.buffer).pipe(stream);
       });
     }
+
+    // Keep the old image if no new image was provided
+    const productNewImageURL = result ? result.secure_url : productOldImageURL;
+    const productNewImagePublicId = result
+      ? result.public_id
+      : productOldImagePublicId;
+
+    await db.query(
+      `update products set productName = ?, productDescription = ?, productImageURL = ?, productImagePublicId = ? where productId = ?`,
+      [
+        productName,
+        productDescription,
+        productNewImageURL,
+        productNewImagePublicId,
+        productId,
+      ],
+    );
+
+    // Delete the old image from Cloudinary if the image changed
+    if (productImage) {
+      await cloudinary.uploader.destroy(productOldImagePublicId);
+    }
+
+    res.json({
+      success: true,
+      productImageURL: productNewImageURL,
+      productImagePublicId: productNewImagePublicId,
+      message: "Produit modifié avec succès!",
+    });
+    // }
   } catch (err) {
     console.error(err);
     res.status(500).json(err);
