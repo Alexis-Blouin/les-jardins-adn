@@ -9,19 +9,22 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import toast from "react-simple-toasts";
 import axios from "axios";
-const { useState, useEffect } = require("react");
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useState, useEffect } from "react";
+import Delete from "./Delete";
 
 function Modify({ product, setProducts, open, handleClose }) {
   const [productId, setProductId] = useState(null);
   const [name, setName] = useState("");
   const [originalName, setOriginalName] = useState("");
   const [description, setDescription] = useState("");
-  const [productImageURL, setProductImageURL] = useState("");
-  const [productImagePublicId, setProductImagePublicId] = useState("");
+  const [imageURL, setProductImageURL] = useState("");
+  const [imagePublicId, setProductImagePublicId] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [imageModified, setImageModified] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   // Update form fields when the product changes
   useEffect(() => {
@@ -36,7 +39,6 @@ function Modify({ product, setProducts, open, handleClose }) {
     }
   }, [product]);
 
-  // TODO
   const handleSubmit = async (event) => {
     event.preventDefault();
     setDisabled(true); // Disable the submit button to prevent multiple submissions
@@ -46,8 +48,8 @@ function Modify({ product, setProducts, open, handleClose }) {
     formData.append("productId", productId); // Include the product ID for updating
     formData.append("productName", name);
     formData.append("productDescription", description);
-    formData.append("productImageURL", productImageURL);
-    formData.append("productImagePublicId", productImagePublicId); // Include the current image public id for deletion
+    formData.append("productImageURL", imageURL);
+    formData.append("productImagePublicId", imagePublicId); // Include the current image public id for deletion
 
     if (imageModified) {
       formData.append("productImage", imageFile, imageFile.name);
@@ -95,9 +97,26 @@ function Modify({ product, setProducts, open, handleClose }) {
     }
   };
 
+  const handleDeleteOpen = () => {
+    setDeleteOpen(true);
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteOpen(false);
+  };
+
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Modifier {originalName}</DialogTitle>
+      <DialogTitle>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ justifyContent: "space-between" }}
+        >
+          <Box>Modifier {originalName}</Box>
+          <DeleteForeverIcon onClick={handleDeleteOpen} />
+        </Stack>
+      </DialogTitle>
       <DialogContent style={{ paddingTop: "5px" }}>
         <Box sx={{ p: 2, maxWidth: "sm", margin: "0 auto" }}>
           <form id="modifyForm" onSubmit={handleSubmit}>
@@ -151,6 +170,16 @@ function Modify({ product, setProducts, open, handleClose }) {
           Modifier
         </Button>
       </DialogActions>
+
+      <Delete
+        open={deleteOpen}
+        handleDeleteClose={handleDeleteClose}
+        handleModifyClose={handleClose}
+        productId={productId}
+        name={originalName}
+        imagePublicId={imagePublicId}
+        setProducts={setProducts}
+      />
     </Dialog>
   );
 }

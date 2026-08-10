@@ -8,8 +8,7 @@ import FormData from "form-data";
 import axios from "axios";
 import toast from "react-simple-toasts";
 import ImageFilePicker from "../inputs/ImageFilePicker";
-
-const { useState } = require("react");
+import { useState } from "react";
 
 // Hidden input for file upload, styled to be visually hidden but still accessible
 const VisuallyHiddenInput = styled("input")({

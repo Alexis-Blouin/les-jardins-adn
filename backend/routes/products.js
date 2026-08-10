@@ -161,14 +161,17 @@ router.patch("/modify", upload.single("productImage"), async (req, res) => {
 
 router.delete("/delete", async (req, res) => {
   try {
-    const noteId = req.query.noteId;
-    await db.query(`delete from notes where noteId = ? and accountId = ?`, [
-      noteId,
-      req.accountId,
-    ]);
+    const productId = req.query.productId;
+    const productImagePublicId = req.query.productImagePublicId;
+
+    await db.query(`delete from products where productId = ?`, [productId]);
+
+    // Delete the image from Cloudinary
+    await cloudinary.uploader.destroy(productImagePublicId);
+
     res.json({
       success: true,
-      message: "Note deleted successfully",
+      message: "Produit supprimé avec succès",
     });
   } catch (err) {
     console.error(err);
@@ -191,25 +194,3 @@ async function selectOneProduct(productName) {
     return {};
   }
 }
-
-/////////////////////////
-// Uploads an image file
-/////////////////////////
-const uploadImage = async (imagePath) => {
-  // Use the uploaded file's name as the asset's public ID and
-  // allow overwriting the asset with new versions
-  const options = {
-    use_filename: true,
-    unique_filename: false,
-    overwrite: true,
-  };
-
-  try {
-    // Upload the image
-    const result = await cloudinary.uploader.upload(imagePath, options);
-    console.log(result);
-    return result.public_id;
-  } catch (error) {
-    console.error(error);
-  }
-};

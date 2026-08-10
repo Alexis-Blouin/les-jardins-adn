@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { styled } from "@mui/material/styles";
-const { useState } = require("react");
+import { useState } from "react";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",

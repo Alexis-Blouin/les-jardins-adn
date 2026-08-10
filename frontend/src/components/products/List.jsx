@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Modify from "./Modify";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
-const { useState } = require("react");
+import { useState } from "react";
 
 function List({ products, setProducts }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
