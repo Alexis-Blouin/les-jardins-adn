@@ -6,8 +6,9 @@ import Typography from "@mui/material/Typography";
 import Modify from "./Modify";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { useState } from "react";
+import ProtectedRoute from "../ProtectedRoute";
 
-function List({ products, setProducts }) {
+function List({ products, setProducts, user }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modifyOpen, setModifyOpen] = useState(false);
 
@@ -43,7 +44,9 @@ function List({ products, setProducts }) {
                 <Typography variant="h4" component="h1" gutterBottom>
                   {product.productName}
                 </Typography>
-                <EditSquareIcon onClick={() => handleModifyOpen(product)} />
+                {user && (
+                  <EditSquareIcon onClick={() => handleModifyOpen(product)} />
+                )}
               </Stack>
               <Typography variant="body1" gutterBottom>
                 {product.productDescription}
