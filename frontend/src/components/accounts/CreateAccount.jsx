@@ -56,12 +56,17 @@ function CreateAccount() {
     >
       <form id="createAccount" onSubmit={handleSubmit}>
         <Stack spacing={2} direction={"column"}>
-          <Typography variant="h4">Create Account</Typography>
-          <TextField id="email" label="Email" type="email" required />
-          <TextField id="password" label="Password" type="password" required />
+          <Typography variant="h4">Créer un compte</Typography>
+          <TextField id="email" label="Courriel" type="email" required />
+          <TextField
+            id="password"
+            label="Mot de passe"
+            type="password"
+            required
+          />
           <TextField
             id="confirmPassword"
-            label="Confirm Password"
+            label="Confirmer le mot de passe"
             type="password"
             required
           />
@@ -71,14 +76,8 @@ function CreateAccount() {
             color="primary"
             type="submit"
           >
-            Create Account
+            Confirmer
           </Button>
-          <Box>
-            <Typography variant="body2">Already have an account? </Typography>
-            <Link component={RouterLink} to="/account/login" underline="hover">
-              Login
-            </Link>
-          </Box>
         </Stack>
       </form>
     </Paper>

@@ -12,7 +12,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
-function Login() {
+function Login({ user }) {
   const navigate = useNavigate();
   const { refreshUser } = useAuth();
 
@@ -48,27 +48,35 @@ function Login() {
     >
       <form id="login" onSubmit={handleSubmit}>
         <Stack spacing={2} direction={"column"}>
-          <Typography variant="h4">Login</Typography>
-          <TextField id="email" label="Email" type="email" required />
-          <TextField id="password" label="Password" type="password" required />
+          <Typography variant="h4">Connexion</Typography>
+          <TextField id="email" label="Courriel" type="email" required />
+          <TextField
+            id="password"
+            label="Mot de passe"
+            type="password"
+            required
+          />
           <Button
             form="login"
             variant="contained"
             color="primary"
             type="submit"
+            disabled={!!user}
           >
-            Login
+            Connexion
           </Button>
-          <Box>
-            <Typography variant="body2">Don't have an account? </Typography>
-            <Link
-              component={RouterLink}
-              to="/account/create-account"
-              underline="hover"
-            >
-              Create an account
-            </Link>
-          </Box>
+          {user && (
+            <Box sx={{ width: "auto" }}>
+              <Typography variant="body2">Vous êtes déjà connecté</Typography>
+              <Link
+                component={RouterLink}
+                to="/compte/deconnexion"
+                underline="hover"
+              >
+                Déconnexion
+              </Link>
+            </Box>
+          )}
         </Stack>
       </form>
     </Paper>
