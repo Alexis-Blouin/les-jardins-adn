@@ -10,7 +10,7 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     const [rows] = await db.query(
-      `select accountId, accountEmail, accountPassword from accounts where accountEmail = ?`,
+      `select accountId, accountEmail, accountPassword, isAdmin from accounts where accountEmail = ?`,
       [email],
     );
     if (rows.length > 0) {
@@ -29,6 +29,7 @@ router.post("/login", async (req, res) => {
         {
           accountId: account.accountId,
           accountEmail: account.accountEmail,
+          isAdmin: account.isAdmin,
         },
         process.env.JWT_SECRET,
         { expiresIn: "7d" },
@@ -58,6 +59,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// TODO Modify to allow admin accounts
 router.post("/create-account", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -108,6 +110,7 @@ router.get("/me", authenticate, (req, res) => {
     success: true,
     accountId: req.accountId,
     accountEmail: req.accountEmail,
+    isAdmin: req.isAdmin,
   });
 });
 

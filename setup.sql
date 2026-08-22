@@ -8,9 +8,10 @@ CREATE TABLE `products` (
 )
 
 CREATE TABLE `accounts` (
-    `accountId` int NOT NULL AUTO_INCREMENT,
-    `accountEmail` varchar(255) NOT NULL,
-    `accountPassword` varchar(255) NOT NULL,
-    PRIMARY KEY (`accountId`),
-    UNIQUE KEY `accountEmail` (`accountEmail`)
+  `accountId` int NOT NULL AUTO_INCREMENT,
+  `accountEmail` varchar(255) NOT NULL,
+  `accountPassword` varchar(255) NOT NULL,
+  `isAdmin` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`accountId`),
+  UNIQUE KEY `accountEmail` (`accountEmail`)
 )

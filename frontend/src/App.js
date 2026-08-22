@@ -100,10 +100,6 @@ const darkTheme = createTheme({
   },
 });
 
-const pages = [
-  { name: "Produits", path: "/produits" },
-  { name: "Ajouter", path: "/ajouter" },
-];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function App() {
@@ -123,6 +119,11 @@ function AppContent({ isDark, setIsDark }) {
   const [products, setProducts] = useState([]);
 
   const { user } = useAuth();
+
+  const pages = [
+    { name: "Produits", path: "/produits" },
+    ...(user?.isAdmin ? [{ name: "Ajouter", path: "/ajouter" }] : []),
+  ];
 
   useEffect(() => {
     axios

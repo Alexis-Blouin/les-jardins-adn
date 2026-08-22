@@ -8,6 +8,7 @@ const authenticate = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.accountId = decoded.accountId;
     req.accountEmail = decoded.accountEmail;
+    req.isAdmin = decoded.isAdmin;
     next();
   } catch {
     res.status(401).json({ error: "Invalid token" });
