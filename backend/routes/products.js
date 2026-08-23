@@ -114,6 +114,9 @@ router.patch(
       const productOldImageURL = req.body.productImageURL;
       const productOldImagePublicId = req.body.productImagePublicId;
       const productImage = req.file ?? null;
+      const productIsAvailable = req.body.productIsAvailable;
+      const productPrice = req.body.productPrice;
+      const productPriceUnit = req.body.productPriceUnit;
 
       // const product = await selectOneProduct(productName);
       // if (product && product.productId !== productId) {
@@ -150,12 +153,16 @@ router.patch(
         : productOldImagePublicId;
 
       await db.query(
-        `update products set productName = ?, productDescription = ?, productImageURL = ?, productImagePublicId = ? where productId = ?`,
+        `update products set productName = ?, productDescription = ?, productImageURL = ?, productImagePublicId = ?,
+        productIsAvailable = ?, productPrice = ?, productPriceUnit = ? where productId = ?`,
         [
           productName,
           productDescription,
           productNewImageURL,
           productNewImagePublicId,
+          productIsAvailable,
+          productPrice,
+          productPriceUnit,
           productId,
         ],
       );

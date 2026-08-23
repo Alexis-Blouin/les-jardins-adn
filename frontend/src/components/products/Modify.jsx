@@ -12,6 +12,10 @@ import axios from "axios";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useState, useEffect } from "react";
 import Delete from "./Delete";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Typography from "@mui/material/Typography";
 
 function Modify({ product, setProducts, open, handleClose }) {
   const [productId, setProductId] = useState(null);
@@ -22,6 +26,9 @@ function Modify({ product, setProducts, open, handleClose }) {
   const [imagePublicId, setProductImagePublicId] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [isAvailable, setIsAvailable] = useState(true);
+  const [price, setPrice] = useState(null);
+  const [priceUnit, setPriceUnit] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [imageModified, setImageModified] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -36,6 +43,9 @@ function Modify({ product, setProducts, open, handleClose }) {
       setProductImageURL(product.productImageURL);
       setProductImagePublicId(product.productImagePublicId);
       setImagePreview(product.productImageURL);
+      setIsAvailable(product.productIsAvailable);
+      setPrice(product.productPrice);
+      setPriceUnit(product.productPriceUnit);
     }
   }, [product]);
 
@@ -50,6 +60,9 @@ function Modify({ product, setProducts, open, handleClose }) {
     formData.append("productDescription", description);
     formData.append("productImageURL", imageURL);
     formData.append("productImagePublicId", imagePublicId); // Include the current image public id for deletion
+    formData.append("productIsAvailable", isAvailable ? 1 : 0);
+    formData.append("productPrice", price);
+    formData.append("productPriceUnit", priceUnit);
 
     if (imageModified) {
       formData.append("productImage", imageFile, imageFile.name);
@@ -73,6 +86,9 @@ function Modify({ product, setProducts, open, handleClose }) {
         productDescription: description,
         productImageURL: res.data.productImageURL,
         productImagePublicId: res.data.productImagePublicId,
+        productIsAvailable: isAvailable,
+        productPrice: price,
+        productPriceUnit: priceUnit,
       };
       setProducts((prevProducts) =>
         prevProducts.map((p) =>
@@ -90,6 +106,9 @@ function Modify({ product, setProducts, open, handleClose }) {
       setDescription("");
       setImageFile(null);
       setImagePreview(null);
+      setIsAvailable(true);
+      setPrice(0.0);
+      setPriceUnit("");
     } catch (err) {
       console.error(err);
       toast("Erreur lors de la modification du produit.", { theme: "failure" });
@@ -139,6 +158,45 @@ function Modify({ product, setProducts, open, handleClose }) {
                 required
                 onChange={(e) => setDescription(e.target.value)}
               />
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={isAvailable}
+                      onChange={(e) => setIsAvailable(e.target.checked)}
+                    />
+                  }
+                  label="Disponible"
+                />
+              </FormGroup>
+              <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+                <TextField
+                  id="price"
+                  name="price"
+                  label="Prix"
+                  type="number"
+                  placeholder="2.50"
+                  value={price}
+                  required
+                  slotProps={{
+                    htmlInput: {
+                      min: 0,
+                      step: 0.01,
+                    },
+                  }}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+                <Typography variant="h3">/</Typography>
+                <TextField
+                  id="priceUnit"
+                  name="priceUnit"
+                  label="Unité"
+                  placeholder="Unité"
+                  value={priceUnit}
+                  required
+                  onChange={(e) => setPriceUnit(e.target.value)}
+                />
+              </Stack>
               <ImageFilePicker
                 setImageFile={setImageFile}
                 setImagePreview={setImagePreview}

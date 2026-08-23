@@ -53,7 +53,7 @@ function List({ products, setProducts, user }) {
               </Typography>
               {product.productIsAvailable ? (
                 <Typography variant="body1">
-                  Disponible à {product.productPrice}${" / "}
+                  Disponible à {Number(product.productPrice).toFixed(2)}${" / "}
                   {product.productPriceUnit}
                 </Typography>
               ) : (

@@ -130,10 +130,16 @@ function Add({ setProducts }) {
               id="price"
               name="price"
               label="Prix"
-              type="decimal"
+              type="number"
               placeholder="2.50"
               value={price}
               required
+              slotProps={{
+                htmlInput: {
+                  min: 0,
+                  step: 0.01,
+                },
+              }}
               onChange={(e) => setPrice(e.target.value)}
             />
             <Typography variant="h3">/</Typography>
