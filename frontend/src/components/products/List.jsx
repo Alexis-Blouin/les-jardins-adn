@@ -41,16 +41,24 @@ function List({ products, setProducts, user }) {
                 spacing={2}
                 sx={{ justifyContent: "space-between" }}
               >
-                <Typography variant="h4" component="h1" gutterBottom>
+                <Typography variant="h4" component="h1">
                   {product.productName}
                 </Typography>
-                {user && (
+                {user?.accountIsAdmin && (
                   <EditSquareIcon onClick={() => handleModifyOpen(product)} />
                 )}
               </Stack>
-              <Typography variant="body1" gutterBottom>
+              <Typography variant="body1">
                 {product.productDescription}
               </Typography>
+              {product.productIsAvailable ? (
+                <Typography variant="body1">
+                  Disponible à {product.productPrice}${" / "}
+                  {product.productPriceUnit}
+                </Typography>
+              ) : (
+                <Typography variant="body1">Indisponible</Typography>
+              )}
               <img src={product.productImageURL} alt={product.productName} />
             </Stack>
           </Paper>

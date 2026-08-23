@@ -20,7 +20,8 @@ const upload = multer({ storage: multer.memoryStorage() }); // Use memory storag
 router.get("/get", async (req, res) => {
   try {
     const [rows] = await db.query(
-      `select productId, productName, productDescription, productImageURL, productImagePublicId
+      `select productId, productName, productDescription, productImageURL, productImagePublicId,
+      productIsAvailable, productPrice, productPriceUnit
       from products`,
     );
     res.json(rows);
@@ -40,6 +41,9 @@ router.post(
       const productName = req.body.productName;
       const productDescription = req.body.productDescription;
       const productImage = req.file;
+      const productIsAvailable = req.body.productIsAvailable;
+      const productPrice = req.body.productPrice;
+      const productPriceUnit = req.body.productPriceUnit;
 
       const product = await selectOneProduct(productName);
       // TODO maybe we don't care if there are two product with the same name
@@ -69,12 +73,16 @@ router.post(
 
         // Insert the product into the database with the image URL
         const [productsResult] = await db.query(
-          `insert into products (productName, productDescription, productImageURL, productImagePublicId) values (?, ?, ?, ?)`,
+          `insert into products (productName, productDescription, productImageURL, productImagePublicId,
+          productIsAvailable, productPrice, productPriceUnit) values (?, ?, ?, ?, ?, ?, ?)`,
           [
             productName,
             productDescription,
             productImageURL,
             productImagePublicId,
+            productIsAvailable,
+            productPrice,
+            productPriceUnit,
           ],
         );
 

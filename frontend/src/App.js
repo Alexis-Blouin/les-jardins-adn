@@ -122,7 +122,7 @@ function AppContent({ isDark, setIsDark }) {
 
   const pages = [
     { name: "Produits", path: "/produits" },
-    ...(user?.isAdmin ? [{ name: "Ajouter", path: "/ajouter" }] : []),
+    ...(user?.accountIsAdmin ? [{ name: "Ajouter", path: "/ajouter" }] : []),
   ];
 
   useEffect(() => {

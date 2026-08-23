@@ -10,7 +10,7 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     const [rows] = await db.query(
-      `select accountId, accountEmail, accountPassword, isAdmin from accounts where accountEmail = ?`,
+      `select accountId, accountEmail, accountPassword, accountIsAdmin from accounts where accountEmail = ?`,
       [email],
     );
     if (rows.length > 0) {
@@ -29,7 +29,7 @@ router.post("/login", async (req, res) => {
         {
           accountId: account.accountId,
           accountEmail: account.accountEmail,
-          isAdmin: account.isAdmin,
+          accountIsAdmin: account.accountIsAdmin,
         },
         process.env.JWT_SECRET,
         { expiresIn: "7d" },
@@ -110,7 +110,7 @@ router.get("/me", authenticate, (req, res) => {
     success: true,
     accountId: req.accountId,
     accountEmail: req.accountEmail,
-    isAdmin: req.isAdmin,
+    accountIsAdmin: req.accountIsAdmin,
   });
 });
 

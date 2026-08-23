@@ -9,6 +9,10 @@ import axios from "axios";
 import toast from "react-simple-toasts";
 import ImageFilePicker from "../inputs/ImageFilePicker";
 import { useState } from "react";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Typography from "@mui/material/Typography";
 
 // Hidden input for file upload, styled to be visually hidden but still accessible
 const VisuallyHiddenInput = styled("input")({
@@ -28,6 +32,9 @@ function Add({ setProducts }) {
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [isAvailable, setIsAvailable] = useState(true);
+  const [price, setPrice] = useState(null);
+  const [priceUnit, setPriceUnit] = useState("");
   const [disabled, setDisabled] = useState(false);
 
   const handleSubmit = async (event) => {
@@ -39,6 +46,9 @@ function Add({ setProducts }) {
     formData.append("productName", name);
     formData.append("productDescription", description);
     formData.append("productImage", imageFile, imageFile.name);
+    formData.append("productIsAvailable", isAvailable ? 1 : 0);
+    formData.append("productPrice", price);
+    formData.append("productPriceUnit", priceUnit);
 
     try {
       const res = await axios.post(
@@ -58,6 +68,9 @@ function Add({ setProducts }) {
         productDescription: description,
         productImageURL: res.data.productImageURL,
         productImagePublicId: res.data.productImagePublicId,
+        productIsAvailable: isAvailable,
+        productPrice: price,
+        productPriceUnit: priceUnit,
       };
       setProducts((prevProducts) => [...prevProducts, newProduct]);
 
@@ -69,6 +82,9 @@ function Add({ setProducts }) {
       setDescription("");
       setImageFile(null);
       setImagePreview(null);
+      setIsAvailable(true);
+      setPrice(0.0);
+      setPriceUnit("");
     } catch (err) {
       console.error(err);
       toast("Erreur lors de l'ajout du produit.", { theme: "failure" });
@@ -83,7 +99,7 @@ function Add({ setProducts }) {
           <TextField
             id="name"
             name="name"
-            label="name"
+            label="Nom"
             placeholder="Oeufs"
             value={name}
             required
@@ -92,12 +108,45 @@ function Add({ setProducts }) {
           <TextField
             id="description"
             name="description"
-            label="description"
+            label="Description"
             placeholder="Oeufs de poule bio"
             value={description}
             required
             onChange={(e) => setDescription(e.target.value)}
           />
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isAvailable}
+                  onChange={(e) => setIsAvailable(e.target.checked)}
+                />
+              }
+              label="Disponible"
+            />
+          </FormGroup>
+          <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+            <TextField
+              id="price"
+              name="price"
+              label="Prix"
+              type="decimal"
+              placeholder="2.50"
+              value={price}
+              required
+              onChange={(e) => setPrice(e.target.value)}
+            />
+            <Typography variant="h3">/</Typography>
+            <TextField
+              id="priceUnit"
+              name="priceUnit"
+              label="Unité"
+              placeholder="Unité"
+              value={priceUnit}
+              required
+              onChange={(e) => setPriceUnit(e.target.value)}
+            />
+          </Stack>
           <ImageFilePicker
             setImageFile={setImageFile}
             setImagePreview={setImagePreview}
