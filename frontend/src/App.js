@@ -117,6 +117,7 @@ function App() {
 
 function AppContent({ isDark, setIsDark }) {
   const [products, setProducts] = useState([]);
+  const [reservations, setReservations] = useState([]);
 
   const { user } = useAuth();
 
@@ -128,8 +129,14 @@ function AppContent({ isDark, setIsDark }) {
   useEffect(() => {
     axios
       .get("http://localhost:8081/products/get")
+      .then((res) => setProducts(res.data))
+      .catch((err) => console.log(err));
+
+    axios
+      .get("http://localhost:8081/reservations/get")
       .then((res) => {
-        setProducts(res.data);
+        setReservations(res.data);
+        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -326,6 +333,7 @@ function AppContent({ isDark, setIsDark }) {
                 <List
                   products={products}
                   setProducts={setProducts}
+                  setReservations={setReservations}
                   user={user}
                 />
               }

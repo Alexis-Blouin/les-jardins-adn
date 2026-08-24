@@ -18,3 +18,16 @@ CREATE TABLE `accounts` (
   PRIMARY KEY (`accountId`),
   UNIQUE KEY `accountEmail` (`accountEmail`)
 )
+
+CREATE TABLE `reservations` (
+  `reservationId` int NOT NULL AUTO_INCREMENT,
+  `accountId` int NOT NULL,
+  `productId` int NOT NULL,
+  `reservationQuantity` decimal(5,1) NOT NULL,
+  `reservationPickupTime` datetime NOT NULL,
+  PRIMARY KEY (`reservationId`),
+  KEY `fk_accountId` (`accountId`),
+  KEY `fk_productId` (`productId`),
+  CONSTRAINT `fk_accountId` FOREIGN KEY (`accountId`) REFERENCES `accounts` (`accountId`),
+  CONSTRAINT `fk_productId` FOREIGN KEY (`productId`) REFERENCES `products` (`productId`)
+)

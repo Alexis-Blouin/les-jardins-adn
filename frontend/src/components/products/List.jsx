@@ -7,10 +7,13 @@ import Modify from "./Modify";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { useState } from "react";
 import ProtectedRoute from "../ProtectedRoute";
+import Add from "../reservations/Add";
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 
-function List({ products, setProducts, user }) {
+function List({ products, setProducts, setReservations, user }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modifyOpen, setModifyOpen] = useState(false);
+  const [addReservationOpen, setAddReservationOpen] = useState(false);
 
   const handleModifyOpen = (product) => {
     setSelectedProduct(product);
@@ -20,6 +23,16 @@ function List({ products, setProducts, user }) {
   const handleModifyClose = () => {
     setSelectedProduct(null);
     setModifyOpen(false);
+  };
+
+  const handleAddReservationOpen = (product) => {
+    setSelectedProduct(product);
+    setAddReservationOpen(true);
+  };
+
+  const handleAddReservationClose = () => {
+    setSelectedProduct(null);
+    setAddReservationOpen(false);
   };
 
   return (
@@ -44,8 +57,12 @@ function List({ products, setProducts, user }) {
                 <Typography variant="h4" component="h1">
                   {product.productName}
                 </Typography>
-                {user?.accountIsAdmin && (
+                {user?.accountIsAdmin ? (
                   <EditSquareIcon onClick={() => handleModifyOpen(product)} />
+                ) : (
+                  <BookmarkAddIcon
+                    onClick={() => handleAddReservationOpen(product)}
+                  />
                 )}
               </Stack>
               <Typography variant="body1">
@@ -70,6 +87,13 @@ function List({ products, setProducts, user }) {
         setProducts={setProducts}
         open={modifyOpen}
         handleClose={handleModifyClose}
+      />
+
+      <Add
+        product={selectedProduct}
+        setReservations={setReservations}
+        open={addReservationOpen}
+        handleClose={handleAddReservationClose}
       />
     </Box>
   );

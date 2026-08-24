@@ -22,10 +22,12 @@ app.get("/", (req, res) => {
 // import routes
 const productsRoutes = require("./routes/products");
 const accountsRoutes = require("./routes/accounts");
+const reservationsRoutes = require("./routes/reservations");
 
 // use routes
 app.use("/products", productsRoutes);
 app.use("/accounts", accountsRoutes);
+app.use("/reservations", reservationsRoutes);
 
 const port = 8081;
 app.listen(port, () => {

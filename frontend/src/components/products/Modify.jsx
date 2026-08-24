@@ -143,7 +143,7 @@ function Modify({ product, setProducts, open, handleClose }) {
               <TextField
                 id="name"
                 name="name"
-                label="name"
+                label="Nom"
                 placeholder="Oeufs"
                 value={name}
                 required
@@ -152,7 +152,7 @@ function Modify({ product, setProducts, open, handleClose }) {
               <TextField
                 id="description"
                 name="description"
-                label="description"
+                label="Description"
                 placeholder="Oeufs de poule bio"
                 value={description}
                 required
@@ -224,6 +224,7 @@ function Modify({ product, setProducts, open, handleClose }) {
           form="modifyForm"
           color="primary"
           variant="contained"
+          disabled={disabled}
         >
           Modifier
         </Button>
