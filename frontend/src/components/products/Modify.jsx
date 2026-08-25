@@ -116,6 +116,7 @@ function Modify({ product, setProducts, open, handleClose }) {
     }
   };
 
+  // Toggle to open of close the delete modal
   const handleDeleteOpen = () => {
     setDeleteOpen(true);
   };

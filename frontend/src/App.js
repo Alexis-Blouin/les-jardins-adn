@@ -126,6 +126,7 @@ function AppContent({ isDark, setIsDark }) {
     ...(user?.accountIsAdmin ? [{ name: "Ajouter", path: "/ajouter" }] : []),
   ];
 
+  // Get all the data we need for the rendering of the pages
   useEffect(() => {
     axios
       .get("http://localhost:8081/products/get")

@@ -15,6 +15,8 @@ function List({ products, setProducts, setReservations, user }) {
   const [modifyOpen, setModifyOpen] = useState(false);
   const [addReservationOpen, setAddReservationOpen] = useState(false);
 
+  // Toggles to open of close the modify and reserve modal
+  // Also sets the product once opened
   const handleModifyOpen = (product) => {
     setSelectedProduct(product);
     setModifyOpen(true);

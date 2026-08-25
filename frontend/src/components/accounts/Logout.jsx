@@ -12,14 +12,17 @@ function Logout() {
   const didLogout = React.useRef(false);
 
   useEffect(() => {
+    // Make sure to not logout twice in a row
     if (didLogout.current) return;
     didLogout.current = true;
 
+    // TODO fix the order of things like the login.jsx one, i guess
     const logout = async () => {
       try {
         const res = await axios.post("http://localhost:8081/accounts/logout");
         toast(res.data.message, { theme: "success" });
         setUser(null);
+        // Navigate to the login page once the logout is done
         navigate("/compte/connexion");
       } catch (error) {
         toast("La déconnexion a échoué", { theme: "failure" });

@@ -26,6 +26,7 @@ function Login({ user }) {
       password,
     });
 
+    // Navigate to the home page if the connection succeeded
     if (res.data.success) {
       toast(res.data.message, { theme: "success" });
       await refreshUser();

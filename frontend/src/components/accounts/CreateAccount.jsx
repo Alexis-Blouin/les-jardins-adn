@@ -13,6 +13,7 @@ import axios from "axios";
 
 function CreateAccount() {
   const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -20,6 +21,7 @@ function CreateAccount() {
     const password = event.target.password.value;
     const confirmPassword = event.target.confirmPassword.value;
 
+    // Make sure the two password match
     if (password !== confirmPassword) {
       toast("Les deux mots de passe doivent être identiques", {
         theme: "failure",
@@ -35,6 +37,7 @@ function CreateAccount() {
       },
     );
 
+    // Navigate to the login page if the account creation succeeded
     if (res.data.success) {
       toast(res.data.message, { theme: "success" });
       navigate("/compte/connexion");

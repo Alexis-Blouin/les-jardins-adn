@@ -5,6 +5,7 @@ const authenticate = require("../middleware/authenticate");
 
 router.get("/get", authenticate, async (req, res) => {
   try {
+    // Query to get all the reservations and join the accounts and products tables
     const [rows] = await db.query(
       `select reservationId, reservationQuantity, reservationPickupTime, a.accountEmail, p.productName, p.productPrice, p.productPriceUnit
       from reservations r where accountId = ?
@@ -13,6 +14,7 @@ router.get("/get", authenticate, async (req, res) => {
       order by reservationPickupTime`,
       [req.accountId],
     );
+
     res.json(rows);
   } catch (err) {
     console.error(err);
@@ -30,6 +32,7 @@ router.post("/add", authenticate, async (req, res) => {
       `insert into reservations (reservationQuantity, reservationPickupTime, productId, accountId) values (?, ?, ?, ?)`,
       [reservationQuantity, reservationPickupTime, productId, req.accountId],
     );
+
     res.json({
       reservationId: reservationsResult.insertId,
       success: true,
