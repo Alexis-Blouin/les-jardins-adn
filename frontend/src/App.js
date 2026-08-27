@@ -29,7 +29,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 import Stack from "@mui/material/Stack";
 import logo_adn from "./images/logo.jpg";
-import List from "./components/products/List";
+import ProductsList from "./components/products/List";
 import Landing from "./components/Landing";
 import Add from "./components/products/Add";
 import useAuth, { AuthProvider } from "./hooks/useAuth";
@@ -37,6 +37,7 @@ import CreateAccount from "./components/accounts/CreateAccount";
 import Login from "./components/accounts/Login";
 import Logout from "./components/accounts/Logout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ReservationsList from "./components/reservations/List";
 
 axios.defaults.withCredentials = true;
 
@@ -125,6 +126,13 @@ function AppContent({ isDark, setIsDark }) {
     { name: "Produits", path: "/produits" },
     ...(user?.accountIsAdmin ? [{ name: "Ajouter", path: "/ajouter" }] : []),
   ];
+  if (user) {
+    if (user.accountIsAdmin) {
+      pages.push({ name: "Ajouter", path: "/ajouter" });
+    } else {
+      pages.push({ name: "Mes réservations", path: "/mes-reservations" });
+    }
+  }
 
   // Get all the data we need for the rendering of the pages
   useEffect(() => {
@@ -135,10 +143,7 @@ function AppContent({ isDark, setIsDark }) {
 
     axios
       .get("http://localhost:8081/reservations/get")
-      .then((res) => {
-        setReservations(res.data);
-        console.log(res.data);
-      })
+      .then((res) => setReservations(res.data))
       .catch((err) => console.log(err));
   }, []);
 
@@ -331,7 +336,7 @@ function AppContent({ isDark, setIsDark }) {
             <Route
               path="/produits"
               element={
-                <List
+                <ProductsList
                   products={products}
                   setProducts={setProducts}
                   setReservations={setReservations}
@@ -361,6 +366,17 @@ function AppContent({ isDark, setIsDark }) {
               element={
                 <ProtectedRoute>
                   <CreateAccount />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/mes-reservations"
+              element={
+                <ProtectedRoute>
+                  <ReservationsList
+                    reservations={reservations}
+                    setReservations={setReservations}
+                  />
                 </ProtectedRoute>
               }
             />

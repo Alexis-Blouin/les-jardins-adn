@@ -31,17 +31,15 @@ function Add({ product, setReservations, open, handleClose }) {
     event.preventDefault();
     setDisabled(true); // Disable the submit button to prevent multiple submissions
 
-    // Create a FormData object to send the reservation data
-    const formData = new FormData();
-    formData.append("quantity", quantity);
-    formData.append("pickupTime", pickupTime);
-    formData.append("productId", product.productId);
+    const pickupTimeFormat = pickupTime.format("YYYY-MM-DD HH:mm:ss");
+    const productId = product.productId;
 
     try {
-      const res = await axios.post(
-        "http://localhost:8081/reservations/add",
-        formData,
-      );
+      const res = await axios.post("http://localhost:8081/reservations/add", {
+        quantity,
+        pickupTime: pickupTimeFormat,
+        productId,
+      });
 
       const newReservation = {
         reservationId: res.data.reservationId,
@@ -60,7 +58,7 @@ function Add({ product, setReservations, open, handleClose }) {
       // Reset the form fields and state after successful submission
       setDisabled(false);
       setQuantity(0);
-      pickupTime(null);
+      setPickupTime(null);
     } catch (err) {
       console.error(err);
       toast("Erreur lors de la réservation", { theme: "failure" });
@@ -81,9 +79,16 @@ function Add({ product, setReservations, open, handleClose }) {
                 id="quantity"
                 name="quantity"
                 label="Quantité"
+                type="number"
                 placeholder="1"
                 value={quantity}
                 required
+                slotProps={{
+                  htmlInput: {
+                    min: 0.5,
+                    step: 0.5,
+                  },
+                }}
                 onChange={(e) => setQuantity(e.target.value)}
               />
               <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -59,13 +59,14 @@ function List({ products, setProducts, setReservations, user }) {
                 <Typography variant="h4" component="h1">
                   {product.productName}
                 </Typography>
-                {user?.accountIsAdmin ? (
-                  <EditSquareIcon onClick={() => handleModifyOpen(product)} />
-                ) : (
-                  <BookmarkAddIcon
-                    onClick={() => handleAddReservationOpen(product)}
-                  />
-                )}
+                {user &&
+                  (user.accountIsAdmin ? (
+                    <EditSquareIcon onClick={() => handleModifyOpen(product)} />
+                  ) : (
+                    <BookmarkAddIcon
+                      onClick={() => handleAddReservationOpen(product)}
+                    />
+                  ))}
               </Stack>
               <Typography variant="body1">
                 {product.productDescription}

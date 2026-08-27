@@ -7,11 +7,11 @@ router.get("/get", authenticate, async (req, res) => {
   try {
     // Query to get all the reservations and join the accounts and products tables
     const [rows] = await db.query(
-      `select reservationId, reservationQuantity, reservationPickupTime, a.accountEmail, p.productName, p.productPrice, p.productPriceUnit
-      from reservations r where accountId = ?
-      join accounts a on r.accountId = a.accountId,
-      join products p on r.productId = p.productId,
-      order by reservationPickupTime`,
+      `select r.reservationId, r.reservationQuantity, r.reservationPickupTime, a.accountEmail, p.productName, p.productPrice, p.productPriceUnit
+      from reservations r
+      join accounts a on r.accountId = a.accountId
+      join products p on r.productId = p.productId
+      where r.accountId = ? order by reservationPickupTime`,
       [req.accountId],
     );
 
@@ -24,8 +24,8 @@ router.get("/get", authenticate, async (req, res) => {
 
 router.post("/add", authenticate, async (req, res) => {
   try {
-    const reservationQuantity = req.body.reservationQuantity;
-    const reservationPickupTime = req.body.reservationPickupTime;
+    const reservationQuantity = req.body.quantity;
+    const reservationPickupTime = req.body.pickupTime;
     const productId = req.body.productId;
 
     const [reservationsResult] = await db.query(
