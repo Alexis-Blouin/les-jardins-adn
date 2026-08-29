@@ -7,7 +7,7 @@ router.get("/get", authenticate, async (req, res) => {
   try {
     // Query to get all the reservations and join the accounts and products tables
     const [rows] = await db.query(
-      `select r.reservationId, r.reservationQuantity, r.reservationPickupTime, a.accountEmail, p.productName, p.productPrice, p.productPriceUnit
+      `select r.reservationId, r.reservationQuantity, r.reservationPickupTime, a.accountEmail, p.productName, p.productPrice, p.productPriceUnit, p.productImageURL
       from reservations r
       join accounts a on r.accountId = a.accountId
       join products p on r.productId = p.productId

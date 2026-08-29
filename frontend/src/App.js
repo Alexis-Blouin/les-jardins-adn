@@ -122,10 +122,7 @@ function AppContent({ isDark, setIsDark }) {
 
   const { user } = useAuth();
 
-  const pages = [
-    { name: "Produits", path: "/produits" },
-    ...(user?.accountIsAdmin ? [{ name: "Ajouter", path: "/ajouter" }] : []),
-  ];
+  const pages = [{ name: "Produits", path: "/produits" }];
   if (user) {
     if (user.accountIsAdmin) {
       pages.push({ name: "Ajouter", path: "/ajouter" });

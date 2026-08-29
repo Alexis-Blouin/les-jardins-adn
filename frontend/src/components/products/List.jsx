@@ -79,7 +79,11 @@ function List({ products, setProducts, setReservations, user }) {
               ) : (
                 <Typography variant="body1">Indisponible</Typography>
               )}
-              <img src={product.productImageURL} alt={product.productName} />
+              <img
+                class="product-image"
+                src={product.productImageURL}
+                alt={product.productName}
+              />
             </Stack>
           </Paper>
         ))}
