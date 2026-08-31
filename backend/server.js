@@ -29,7 +29,7 @@ app.use("/products", productsRoutes);
 app.use("/accounts", accountsRoutes);
 app.use("/reservations", reservationsRoutes);
 
-const port = 8081;
+const port = process.env.PORT || 8081;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
