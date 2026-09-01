@@ -11,7 +11,7 @@ import toast from "react-simple-toasts";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function CreateAccount() {
+function CreateAccount({ user }) {
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -78,9 +78,33 @@ function CreateAccount() {
             variant="contained"
             color="primary"
             type="submit"
+            disabled={!!user}
           >
             Confirmer
           </Button>
+          {user ? (
+            <Box sx={{ width: "auto" }}>
+              <Typography variant="body2">Vous êtes déjà connecté</Typography>
+              <Link
+                component={RouterLink}
+                to="/compte/deconnexion"
+                underline="hover"
+              >
+                Déconnexion
+              </Link>
+            </Box>
+          ) : (
+            <Box>
+              <Typography variant="body2">Vous avez déjà un compte?</Typography>
+              <Link
+                component={RouterLink}
+                to="/compte/connexion"
+                underline="hover"
+              >
+                Connexion
+              </Link>
+            </Box>
+          )}
         </Stack>
       </form>
     </Paper>
