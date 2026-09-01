@@ -131,6 +131,8 @@ function AppContent({ isDark, setIsDark }) {
     }
   }
 
+  console.log(process.env.REACT_APP_API_URL);
+
   const API_URL = process.env.REACT_APP_API_URL;
   // Get all the data we need for the rendering of the pages
   useEffect(() => {
