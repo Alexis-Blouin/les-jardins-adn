@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import PersonIcon from "@mui/icons-material/Person";
 import Masonry from "@mui/lab/Masonry";
 import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
@@ -33,6 +34,7 @@ import ProductsList from "./components/products/List";
 import Landing from "./components/Landing";
 import Add from "./components/products/Add";
 import useAuth, { AuthProvider } from "./hooks/useAuth";
+import Profile from "./components/accounts/Profile";
 import CreateAccount from "./components/accounts/CreateAccount";
 import Login from "./components/accounts/Login";
 import Logout from "./components/accounts/Logout";
@@ -101,8 +103,6 @@ const darkTheme = createTheme({
   },
 });
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
 function App() {
   const [isDark, setIsDark] = React.useState(false);
 
@@ -131,7 +131,12 @@ function AppContent({ isDark, setIsDark }) {
     }
   }
 
-  console.log(process.env.REACT_APP_API_URL);
+  const settings = [
+    { name: "Profil", path: "/compte/profil" },
+    user
+      ? { name: "Déconnexion", path: "/compte/deconnexion" }
+      : { name: "Connexion", path: "/compte/connexion" },
+  ];
 
   const API_URL = process.env.REACT_APP_API_URL;
   // Get all the data we need for the rendering of the pages
@@ -296,10 +301,13 @@ function AppContent({ isDark, setIsDark }) {
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
-                    />
+                    <Avatar sx={{ bgcolor: "primary.dark" }}>
+                      {user ? (
+                        user.accountEmail[0].toUpperCase()
+                      ) : (
+                        <PersonIcon />
+                      )}
+                    </Avatar>
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -319,9 +327,14 @@ function AppContent({ isDark, setIsDark }) {
                   onClose={handleCloseUserMenu}
                 >
                   {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <MenuItem
+                      key={setting.name}
+                      component={Link}
+                      to={setting.path}
+                      onClick={handleCloseUserMenu}
+                    >
                       <Typography sx={{ textAlign: "center" }}>
-                        {setting}
+                        {setting.name}
                       </Typography>
                     </MenuItem>
                   ))}
@@ -349,6 +362,14 @@ function AppContent({ isDark, setIsDark }) {
               element={
                 <ProtectedRoute>
                   <Add setProducts={setProducts} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/compte/profil"
+              element={
+                <ProtectedRoute>
+                  <Profile account={user} />
                 </ProtectedRoute>
               }
             />
@@ -392,20 +413,9 @@ function AppContent({ isDark, setIsDark }) {
             borderColor: "divider",
           }}
         >
-          <Stack direction="row" spacing={2} sx={{ justifyContent: "center" }}>
-            <Typography variant="body1">
-              @2026 Les Jardins ADN. Tous droits réservés.
-            </Typography>
-            {user ? (
-              <Link component={RouterLink} to="/compte/deconnexion">
-                <Typography variant="body1">Déconnexion</Typography>
-              </Link>
-            ) : (
-              <Link component={RouterLink} to="/compte/connexion">
-                <Typography variant="body1">Administrateur</Typography>
-              </Link>
-            )}
-          </Stack>
+          <Typography variant="body1" align="center">
+            @2026 Les Jardins ADN. Tous droits réservés.
+          </Typography>
         </Box>
       </Box>
     </Router>
