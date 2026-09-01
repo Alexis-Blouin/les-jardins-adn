@@ -384,11 +384,7 @@ function AppContent({ isDark, setIsDark }) {
             />
             <Route
               path="/compte/creer-compte"
-              element={
-                <ProtectedRoute>
-                  <CreateAccount />
-                </ProtectedRoute>
-              }
+              element={<CreateAccount user={user} />}
             />
             <Route
               path="/mes-reservations"

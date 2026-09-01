@@ -69,7 +69,7 @@ function Login({ user }) {
           >
             Connexion
           </Button>
-          {user && (
+          {user ? (
             <Box sx={{ width: "auto" }}>
               <Typography variant="body2">Vous êtes déjà connecté</Typography>
               <Link
@@ -78,6 +78,19 @@ function Login({ user }) {
                 underline="hover"
               >
                 Déconnexion
+              </Link>
+            </Box>
+          ) : (
+            <Box>
+              <Typography variant="body2">
+                Vous n'avez pas de compte?
+              </Typography>
+              <Link
+                component={RouterLink}
+                to="/compte/creer-compte"
+                underline="hover"
+              >
+                Create an account
               </Link>
             </Box>
           )}
