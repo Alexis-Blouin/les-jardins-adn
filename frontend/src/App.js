@@ -131,15 +131,18 @@ function AppContent({ isDark, setIsDark }) {
     }
   }
 
+  console.log(process.env.REACT_APP_API_URL);
+
+  const API_URL = process.env.REACT_APP_API_URL;
   // Get all the data we need for the rendering of the pages
   useEffect(() => {
     axios
-      .get("http://localhost:8081/products/get")
+      .get(`${API_URL}/products/get`)
       .then((res) => setProducts(res.data))
       .catch((err) => console.log(err));
 
     axios
-      .get("http://localhost:8081/reservations/get")
+      .get(`${API_URL}/reservations/get`)
       .then((res) => setReservations(res.data))
       .catch((err) => console.log(err));
   }, []);

@@ -21,10 +21,13 @@ function Login({ user }) {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    const res = await axios.post("http://localhost:8081/accounts/login", {
-      email,
-      password,
-    });
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/accounts/login`,
+      {
+        email,
+        password,
+      },
+    );
 
     // Navigate to the home page if the connection succeeded
     if (res.data.success) {

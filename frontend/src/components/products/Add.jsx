@@ -52,7 +52,7 @@ function Add({ setProducts }) {
 
     try {
       const res = await axios.post(
-        "http://localhost:8081/products/add",
+        `${process.env.REACT_APP_API_URL}/products/add`,
         formData,
         {
           headers: {
