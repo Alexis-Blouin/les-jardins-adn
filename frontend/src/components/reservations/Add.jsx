@@ -35,11 +35,14 @@ function Add({ product, setReservations, open, handleClose }) {
     const productId = product.productId;
 
     try {
-      const res = await axios.post("http://localhost:8081/reservations/add", {
-        quantity,
-        pickupTime: pickupTimeFormat,
-        productId,
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/reservations/add`,
+        {
+          quantity,
+          pickupTime: pickupTimeFormat,
+          productId,
+        },
+      );
 
       const newReservation = {
         reservationId: res.data.reservationId,

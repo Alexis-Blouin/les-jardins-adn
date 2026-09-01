@@ -21,7 +21,9 @@ export function AuthProvider({ children }) {
   const refreshUser = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:8081/accounts/me");
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/accounts/me`,
+      );
       if (res.data.success) {
         setUser(res.data);
       } else {

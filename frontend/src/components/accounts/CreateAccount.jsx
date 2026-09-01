@@ -30,7 +30,7 @@ function CreateAccount() {
     }
 
     const res = await axios.post(
-      "http://localhost:8081/accounts/create-account",
+      `${process.env.REACT_APP_API_URL}/accounts/create-account`,
       {
         email,
         password,

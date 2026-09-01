@@ -19,7 +19,9 @@ function Logout() {
     // TODO fix the order of things like the login.jsx one, i guess
     const logout = async () => {
       try {
-        const res = await axios.post("http://localhost:8081/accounts/logout");
+        const res = await axios.post(
+          `${process.env.REACT_APP_API_URL}/accounts/logout`,
+        );
         toast(res.data.message, { theme: "success" });
         setUser(null);
         // Navigate to the login page once the logout is done

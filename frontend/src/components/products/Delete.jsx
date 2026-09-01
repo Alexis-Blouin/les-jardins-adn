@@ -22,13 +22,16 @@ function Delete({
 
   const handleConfirm = async (event) => {
     try {
-      const res = await axios.delete("http://localhost:8081/products/delete", {
-        // params here since it's delete and not post
-        params: {
-          productId: productId,
-          productImagePublicId: imagePublicId, // Include the current image public id for deletion
+      const res = await axios.delete(
+        `${process.env.REACT_APP_API_URL}/products/delete`,
+        {
+          // params here since it's delete and not post
+          params: {
+            productId: productId,
+            productImagePublicId: imagePublicId, // Include the current image public id for deletion
+          },
         },
-      });
+      );
 
       setProducts((prevProducts) =>
         prevProducts.filter((p) => p.productId !== productId),

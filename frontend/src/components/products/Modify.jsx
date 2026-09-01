@@ -70,7 +70,7 @@ function Modify({ product, setProducts, open, handleClose }) {
 
     try {
       const res = await axios.patch(
-        "http://localhost:8081/products/modify",
+        `${process.env.REACT_APP_API_URL}/products/modify`,
         formData,
         {
           headers: {
