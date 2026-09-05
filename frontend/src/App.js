@@ -1,11 +1,9 @@
-import logo from "./logo.svg";
 import "./App.css";
 import "react-simple-toasts/dist/style.css"; // Will give a warning, but works anyway.
 import "react-simple-toasts/dist/theme/info.css";
 import "react-simple-toasts/dist/theme/success.css";
 import "react-simple-toasts/dist/theme/failure.css";
 import { toastConfig } from "react-simple-toasts";
-import Paper from "@mui/material/Paper";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,18 +15,14 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
-import Masonry from "@mui/lab/Masonry";
 import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
 
-import Stack from "@mui/material/Stack";
 import logo_adn from "./images/logo.jpg";
 import ProductsList from "./components/products/List";
 import Landing from "./components/Landing";
@@ -131,12 +125,12 @@ function AppContent({ isDark, setIsDark }) {
     }
   }
 
-  const settings = [
-    { name: "Profil", path: "/compte/profil" },
-    user
-      ? { name: "Déconnexion", path: "/compte/deconnexion" }
-      : { name: "Connexion", path: "/compte/connexion" },
-  ];
+  const settings = user
+    ? [
+        { name: "Profil", path: "/compte/profil" },
+        { name: "Déconnexion", path: "/compte/deconnexion" },
+      ]
+    : [{ name: "Connexion", path: "/compte/connexion" }];
 
   const API_URL = process.env.REACT_APP_API_URL;
   // Get all the data we need for the rendering of the pages
