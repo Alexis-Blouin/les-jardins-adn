@@ -374,14 +374,7 @@ function AppContent({ isDark, setIsDark }) {
               }
             />
             <Route path="/compte/connexion" element={<Login user={user} />} />
-            <Route
-              path="/compte/deconnexion"
-              element={
-                <ProtectedRoute>
-                  <Logout />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/compte/deconnexion" element={<Logout />} />
             <Route
               path="/compte/creer-compte"
               element={<CreateAccount user={user} />}

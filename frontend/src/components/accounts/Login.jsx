@@ -90,7 +90,7 @@ function Login({ user }) {
                 to="/compte/creer-compte"
                 underline="hover"
               >
-                Create an account
+                Créer un compte
               </Link>
             </Box>
           )}
