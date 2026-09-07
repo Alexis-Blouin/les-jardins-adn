@@ -22,6 +22,25 @@ router.get("/get", authenticate, async (req, res) => {
   }
 });
 
+router.get("/getAll", authenticate, async (req, res) => {
+  try {
+    // Query to get all the reservations and join the accounts and products tables
+    const [rows] = await db.query(
+      `select r.reservationId, r.reservationQuantity, r.reservationPickupTime, 
+      a.accountEmail, a.accountFirstName, a.accountLastName, a.accountPhone, 
+      p.productName, p.productPrice, p.productPriceUnit, p.productImageURL
+      from reservations r
+      join accounts a on r.accountId = a.accountId
+      join products p on r.productId = p.productId`,
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
 router.post("/add", authenticate, async (req, res) => {
   try {
     const reservationQuantity = req.body.quantity;

@@ -11,7 +11,7 @@ router.post("/login", async (req, res) => {
 
     // Get the hashed password of the current account to compare them
     const [rows] = await db.query(
-      `select accountId, accountEmail, accountPassword, accountIsAdmin from accounts where accountEmail = ?`,
+      `select accountId, accountEmail, accountPassword, accountIsAdmin, accountFirstName, accountLastName, accountPhone from accounts where accountEmail = ?`,
       [email],
     );
     if (rows.length > 0) {

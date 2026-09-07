@@ -33,7 +33,9 @@ import CreateAccount from "./components/accounts/CreateAccount";
 import Login from "./components/accounts/Login";
 import Logout from "./components/accounts/Logout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import ReservationsList from "./components/reservations/List";
+import ReservationsListAdmin from "./components/reservations/ListAdmin";
 
 axios.defaults.withCredentials = true;
 
@@ -113,6 +115,7 @@ function App() {
 function AppContent({ isDark, setIsDark }) {
   const [products, setProducts] = useState([]);
   const [reservations, setReservations] = useState([]);
+  const [allReservations, setAllReservations] = useState([]);
 
   const { user } = useAuth();
 
@@ -120,6 +123,7 @@ function AppContent({ isDark, setIsDark }) {
   if (user) {
     if (user.accountIsAdmin) {
       pages.push({ name: "Ajouter", path: "/ajouter" });
+      pages.push({ name: "Réservations", path: "/reservations" });
     } else {
       pages.push({ name: "Mes réservations", path: "/mes-reservations" });
     }
@@ -144,7 +148,12 @@ function AppContent({ isDark, setIsDark }) {
       .get(`${API_URL}/reservations/get`)
       .then((res) => setReservations(res.data))
       .catch((err) => console.log(err));
-  }, []);
+
+    axios
+      .get(`${API_URL}/reservations/getAll`)
+      .then((res) => setAllReservations(res.data))
+      .catch((err) => console.log(err));
+  }, [user]);
 
   const toggleTheme = () => {
     setIsDark(!isDark);
@@ -382,6 +391,17 @@ function AppContent({ isDark, setIsDark }) {
                     setReservations={setReservations}
                   />
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reservations"
+              element={
+                <AdminRoute>
+                  <ReservationsListAdmin
+                    reservations={allReservations}
+                    setReservations={setAllReservations}
+                  />
+                </AdminRoute>
               }
             />
           </Routes>
