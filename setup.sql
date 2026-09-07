@@ -14,7 +14,10 @@ CREATE TABLE `accounts` (
   `accountId` int NOT NULL AUTO_INCREMENT,
   `accountEmail` varchar(255) NOT NULL,
   `accountPassword` varchar(255) NOT NULL,
-  `accountIsAdmin` tinyint(1) NOT NULL,
+  `accountIsAdmin` tinyint(1) NOT NULL DEFAULT '0',
+  `accountFirstName` varchar(45) NOT NULL,
+  `accountLastName` varchar(45) NOT NULL,
+  `accountPhone` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`accountId`),
   UNIQUE KEY `accountEmail` (`accountEmail`)
 )

@@ -10,16 +10,28 @@ import { Link as RouterLink } from "react-router-dom";
 import toast from "react-simple-toasts";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import validator from "validator";
 
 function CreateAccount({ user }) {
   const navigate = useNavigate();
 
+  console.log("CreateAccount");
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const firstName = event.target.firstName.value;
+    const lastName = event.target.lastName.value;
     const email = event.target.email.value;
+    const phone = event.target.phone.value;
     const password = event.target.password.value;
     const confirmPassword = event.target.confirmPassword.value;
+
+    // Validate the phone number if provided
+    if (phone && !validator.isMobilePhone(phone, ["en-CA", "en-US"])) {
+      toast("Le numéro de téléphone n'est pas valide", { theme: "failure" });
+      return;
+    }
 
     // Make sure the two password match
     if (password !== confirmPassword) {
@@ -32,7 +44,10 @@ function CreateAccount({ user }) {
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/accounts/create-account`,
       {
+        firstName,
+        lastName,
         email,
+        phone,
         password,
       },
     );
@@ -60,7 +75,10 @@ function CreateAccount({ user }) {
       <form id="createAccount" onSubmit={handleSubmit}>
         <Stack spacing={2} direction={"column"}>
           <Typography variant="h4">Créer un compte</Typography>
+          <TextField id="firstName" label="Prénom" required />
+          <TextField id="lastName" label="Nom" required />
           <TextField id="email" label="Courriel" type="email" required />
+          <TextField id="phone" label="Téléphone" type="tel" />
           <TextField
             id="password"
             label="Mot de passe"

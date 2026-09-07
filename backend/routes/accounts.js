@@ -11,7 +11,7 @@ router.post("/login", async (req, res) => {
 
     // Get the hashed password of the current account to compare them
     const [rows] = await db.query(
-      `select accountId, accountEmail, accountPassword, accountIsAdmin from accounts where accountEmail = ?`,
+      `select accountId, accountEmail, accountPassword, accountIsAdmin, accountFirstName, accountLastName, accountPhone from accounts where accountEmail = ?`,
       [email],
     );
     if (rows.length > 0) {
@@ -34,6 +34,9 @@ router.post("/login", async (req, res) => {
           accountId: account.accountId,
           accountEmail: account.accountEmail,
           accountIsAdmin: account.accountIsAdmin,
+          accountFirstName: account.accountFirstName,
+          accountLastName: account.accountLastName,
+          accountPhone: account.accountPhone,
         },
         process.env.JWT_SECRET,
         { expiresIn: "7d" },
@@ -67,7 +70,7 @@ router.post("/login", async (req, res) => {
 // TODO Modify to allow admin accounts
 router.post("/create-account", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, firstName, lastName, phone } = req.body;
 
     const [rows] = await db.query(
       `select accountId from accounts where accountEmail = ?`,
@@ -85,8 +88,8 @@ router.post("/create-account", async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
       await db.query(
-        `insert into accounts (accountEmail, accountPassword) values (?, ?)`,
-        [email, hashedPassword],
+        `insert into accounts (accountEmail, accountPassword, accountFirstName, accountLastName, accountPhone) values (?, ?, ?, ?, ?)`,
+        [email, hashedPassword, firstName, lastName, phone],
       );
 
       res.json({
@@ -121,6 +124,9 @@ router.get("/me", authenticate, (req, res) => {
     accountId: req.accountId,
     accountEmail: req.accountEmail,
     accountIsAdmin: req.accountIsAdmin,
+    accountFirstName: req.accountFirstName,
+    accountLastName: req.accountLastName,
+    accountPhone: req.accountPhone,
   });
 });
 

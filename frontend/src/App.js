@@ -1,11 +1,9 @@
-import logo from "./logo.svg";
 import "./App.css";
 import "react-simple-toasts/dist/style.css"; // Will give a warning, but works anyway.
 import "react-simple-toasts/dist/theme/info.css";
 import "react-simple-toasts/dist/theme/success.css";
 import "react-simple-toasts/dist/theme/failure.css";
 import { toastConfig } from "react-simple-toasts";
-import Paper from "@mui/material/Paper";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,18 +15,14 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
-import Masonry from "@mui/lab/Masonry";
 import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
 
-import Stack from "@mui/material/Stack";
 import logo_adn from "./images/logo.jpg";
 import ProductsList from "./components/products/List";
 import Landing from "./components/Landing";
@@ -39,7 +33,9 @@ import CreateAccount from "./components/accounts/CreateAccount";
 import Login from "./components/accounts/Login";
 import Logout from "./components/accounts/Logout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import ReservationsList from "./components/reservations/List";
+import ReservationsListAdmin from "./components/reservations/ListAdmin";
 
 axios.defaults.withCredentials = true;
 
@@ -119,6 +115,7 @@ function App() {
 function AppContent({ isDark, setIsDark }) {
   const [products, setProducts] = useState([]);
   const [reservations, setReservations] = useState([]);
+  const [allReservations, setAllReservations] = useState([]);
 
   const { user } = useAuth();
 
@@ -126,17 +123,18 @@ function AppContent({ isDark, setIsDark }) {
   if (user) {
     if (user.accountIsAdmin) {
       pages.push({ name: "Ajouter", path: "/ajouter" });
+      pages.push({ name: "Réservations", path: "/reservations" });
     } else {
       pages.push({ name: "Mes réservations", path: "/mes-reservations" });
     }
   }
 
-  const settings = [
-    { name: "Profil", path: "/compte/profil" },
-    user
-      ? { name: "Déconnexion", path: "/compte/deconnexion" }
-      : { name: "Connexion", path: "/compte/connexion" },
-  ];
+  const settings = user
+    ? [
+        { name: "Profil", path: "/compte/profil" },
+        { name: "Déconnexion", path: "/compte/deconnexion" },
+      ]
+    : [{ name: "Connexion", path: "/compte/connexion" }];
 
   const API_URL = process.env.REACT_APP_API_URL;
   // Get all the data we need for the rendering of the pages
@@ -150,7 +148,12 @@ function AppContent({ isDark, setIsDark }) {
       .get(`${API_URL}/reservations/get`)
       .then((res) => setReservations(res.data))
       .catch((err) => console.log(err));
-  }, []);
+
+    axios
+      .get(`${API_URL}/reservations/getAll`)
+      .then((res) => setAllReservations(res.data))
+      .catch((err) => console.log(err));
+  }, [user]);
 
   const toggleTheme = () => {
     setIsDark(!isDark);
@@ -303,7 +306,7 @@ function AppContent({ isDark, setIsDark }) {
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar sx={{ bgcolor: "primary.dark" }}>
                       {user ? (
-                        user.accountEmail[0].toUpperCase()
+                        user.accountFirstName[0].toUpperCase()
                       ) : (
                         <PersonIcon />
                       )}
@@ -388,6 +391,17 @@ function AppContent({ isDark, setIsDark }) {
                     setReservations={setReservations}
                   />
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reservations"
+              element={
+                <AdminRoute>
+                  <ReservationsListAdmin
+                    reservations={allReservations}
+                    setReservations={setAllReservations}
+                  />
+                </AdminRoute>
               }
             />
           </Routes>

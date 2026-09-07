@@ -9,6 +9,9 @@ const authenticate = (req, res, next) => {
     req.accountId = decoded.accountId;
     req.accountEmail = decoded.accountEmail;
     req.accountIsAdmin = decoded.accountIsAdmin;
+    req.accountFirstName = decoded.accountFirstName;
+    req.accountLastName = decoded.accountLastName;
+    req.accountPhone = decoded.accountPhone;
     next();
   } catch {
     res.status(401).json({ error: "Invalid token" });
