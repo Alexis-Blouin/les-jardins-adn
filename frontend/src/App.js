@@ -306,7 +306,7 @@ function AppContent({ isDark, setIsDark }) {
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar sx={{ bgcolor: "primary.dark" }}>
                       {user ? (
-                        user.accountEmail[0].toUpperCase()
+                        user.accountFirstName[0].toUpperCase()
                       ) : (
                         <PersonIcon />
                       )}

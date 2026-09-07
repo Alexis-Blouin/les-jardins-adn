@@ -21,6 +21,7 @@
     "react-router-dom": "^7.18.2",
     "react-scripts": "5.0.1",
     "react-simple-toasts": "^6.1.0",
+    "validator": "^13.15.35",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
