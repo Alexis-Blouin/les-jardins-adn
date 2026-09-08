@@ -64,12 +64,17 @@ function CreateAccount({ user }) {
   return (
     <Paper
       sx={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
+        mt: 2,
         p: 2,
-        maxWidth: "400px",
+        maxWidth: "sm",
+        ml: {
+          xs: 2,
+          sm: "auto",
+        },
+        mr: {
+          xs: 2,
+          sm: "auto",
+        },
       }}
     >
       <form id="createAccount" onSubmit={handleSubmit}>
