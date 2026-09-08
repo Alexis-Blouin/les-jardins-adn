@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import Modify from "./Modify";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { useState } from "react";
-import ProtectedRoute from "../ProtectedRoute";
 import Add from "../reservations/Add";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 
@@ -47,6 +46,7 @@ function List({ products, setProducts, setReservations, user }) {
           lg: 4,
         }}
         spacing={2}
+        sx={{ ml: 0 }}
       >
         {products.map((product) => (
           <Paper>

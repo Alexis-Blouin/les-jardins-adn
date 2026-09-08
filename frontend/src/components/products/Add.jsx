@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -13,6 +12,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Typography from "@mui/material/Typography";
+import FormPaper from "../FormPaper";
 
 // Hidden input for file upload, styled to be visually hidden but still accessible
 const VisuallyHiddenInput = styled("input")({
@@ -93,7 +93,7 @@ function Add({ setProducts }) {
   };
 
   return (
-    <Box sx={{ p: 2, maxWidth: "sm", margin: "0 auto" }}>
+    <FormPaper>
       <form id="addForm" onSubmit={handleSubmit}>
         <Stack direction="column" spacing={2}>
           <TextField
@@ -177,7 +177,7 @@ function Add({ setProducts }) {
           </Button>
         </Stack>
       </form>
-    </Box>
+    </FormPaper>
   );
 }
 
