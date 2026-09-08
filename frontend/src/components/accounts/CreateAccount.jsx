@@ -2,7 +2,6 @@ import React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
@@ -11,6 +10,7 @@ import toast from "react-simple-toasts";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import validator from "validator";
+import FormPaper from "../FormPaper";
 
 function CreateAccount({ user }) {
   const navigate = useNavigate();
@@ -62,21 +62,7 @@ function CreateAccount({ user }) {
   };
 
   return (
-    <Paper
-      sx={{
-        mt: 2,
-        p: 2,
-        maxWidth: "sm",
-        ml: {
-          xs: 2,
-          sm: "auto",
-        },
-        mr: {
-          xs: 2,
-          sm: "auto",
-        },
-      }}
-    >
+    <FormPaper>
       <form id="createAccount" onSubmit={handleSubmit}>
         <Stack spacing={2} direction={"column"}>
           <Typography variant="h4">Créer un compte</Typography>
@@ -130,7 +116,7 @@ function CreateAccount({ user }) {
           )}
         </Stack>
       </form>
-    </Paper>
+    </FormPaper>
   );
 }
 

@@ -11,6 +11,7 @@ import toast from "react-simple-toasts";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import FormPaper from "../FormPaper";
 
 function Login({ user }) {
   const navigate = useNavigate();
@@ -40,21 +41,7 @@ function Login({ user }) {
   };
 
   return (
-    <Paper
-      sx={{
-        mt: 2,
-        p: 2,
-        maxWidth: "sm",
-        ml: {
-          xs: 2,
-          sm: "auto",
-        },
-        mr: {
-          xs: 2,
-          sm: "auto",
-        },
-      }}
-    >
+    <FormPaper>
       <form id="login" onSubmit={handleSubmit}>
         <Stack spacing={2} direction={"column"}>
           <Typography variant="h4">Connexion</Typography>
@@ -101,7 +88,7 @@ function Login({ user }) {
           )}
         </Stack>
       </form>
-    </Paper>
+    </FormPaper>
   );
 }
 
