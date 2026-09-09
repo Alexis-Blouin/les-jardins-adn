@@ -35,7 +35,6 @@ import Logout from "./components/accounts/Logout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import ReservationsList from "./components/reservations/List";
-import ReservationsListAdmin from "./components/reservations/ListAdmin";
 
 axios.defaults.withCredentials = true;
 
@@ -397,9 +396,12 @@ function AppContent({ isDark, setIsDark }) {
               path="/reservations"
               element={
                 <AdminRoute>
-                  <ReservationsListAdmin
-                    reservations={allReservations}
-                    setReservations={setAllReservations}
+                  <ReservationsList
+                    reservations={reservations}
+                    setReservations={setReservations}
+                    allReservations={allReservations}
+                    setAllReservations={setAllReservations}
+                    isAdmin={user && user.accountIsAdmin}
                   />
                 </AdminRoute>
               }

@@ -2,44 +2,50 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import dayjs from "dayjs";
+import "dayjs/locale/fr";
 
-function List({ reservations, setReservations }) {
+function List({
+  reservations,
+  setReservations,
+  allReservations = [],
+  setAllReservations = [],
+  isAdmin = false,
+}) {
+  if (isAdmin && allReservations.length > 0) {
+    reservations = allReservations;
+  }
+  dayjs.locale("fr");
   return (
     <Box sx={{ p: 2, maxWidth: "xl", margin: "0 auto" }}>
       <Stack direction="column" spacing={2}>
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "2fr 1fr 2fr 200px",
-            gap: 2,
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h5">Produit</Typography>
-          <Typography variant="h5">Quantité</Typography>
-          <Typography variant="h5">Date de récupération</Typography>
-        </Box>
-
         {reservations.map((reservation) => (
           <Paper sx={{ p: 2 }}>
             <Box
               sx={{
-                display: "grid",
-                gridTemplateColumns: "2fr 1fr 2fr 200px",
-                gap: 2,
+                display: "flex",
+                justifyContent: "space-between",
                 alignItems: "center",
+                gap: 2,
               }}
             >
-              <Typography>{reservation.productName}</Typography>
-              <Typography>{reservation.reservationQuantity}</Typography>
-              <Typography>{reservation.reservationPickupTime}</Typography>
-              <Box sx={{ width: "200px", textAlign: "center" }}>
-                <img
-                  className="reservation-image"
-                  src={reservation.productImageURL}
-                  alt={reservation.productName}
-                />
-              </Box>
+              <Stack direction="column" spacing={2}>
+                <Typography>{reservation.productName}</Typography>
+                <Typography>
+                  {reservation.reservationQuantity}{" "}
+                  {reservation.productPriceUnit}(s)
+                </Typography>
+                <Typography>
+                  {dayjs(reservation.reservationPickupTime).format(
+                    "D MMMM YYYY [à] HH:mm",
+                  )}
+                </Typography>
+              </Stack>
+              {isAdmin ? (
+                <UserDetails reservation={reservation} />
+              ) : (
+                <Image reservation={reservation} />
+              )}
             </Box>
           </Paper>
         ))}
@@ -49,3 +55,27 @@ function List({ reservations, setReservations }) {
 }
 
 export default List;
+
+function Image({ reservation }) {
+  return (
+    <Box sx={{ flexShrink: 0 }}>
+      <img
+        className="reservation-image"
+        src={reservation.productImageURL}
+        alt={reservation.productName}
+      />
+    </Box>
+  );
+}
+
+function UserDetails({ reservation }) {
+  return (
+    <Stack spacing={1}>
+      <Typography>
+        {reservation.accountFirstName} {reservation.accountLastName}
+      </Typography>
+      <Typography>{reservation.accountEmail}</Typography>
+      <Typography>{reservation.accountPhone}</Typography>
+    </Stack>
+  );
+}
