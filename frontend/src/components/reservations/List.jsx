@@ -5,7 +5,16 @@ import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import "dayjs/locale/fr";
 
-function List({ reservations, setReservations }) {
+function List({
+  reservations,
+  setReservations,
+  allReservations = [],
+  setAllReservations = [],
+  isAdmin = false,
+}) {
+  if (isAdmin && allReservations.length > 0) {
+    reservations = allReservations;
+  }
   dayjs.locale("fr");
   return (
     <Box sx={{ p: 2, maxWidth: "xl", margin: "0 auto" }}>
@@ -32,13 +41,11 @@ function List({ reservations, setReservations }) {
                   )}
                 </Typography>
               </Stack>
-              <Box sx={{ flexShrink: 0 }}>
-                <img
-                  className="reservation-image"
-                  src={reservation.productImageURL}
-                  alt={reservation.productName}
-                />
-              </Box>
+              {isAdmin ? (
+                <UserDetails reservation={reservation} />
+              ) : (
+                <Image reservation={reservation} />
+              )}
             </Box>
           </Paper>
         ))}
@@ -48,3 +55,27 @@ function List({ reservations, setReservations }) {
 }
 
 export default List;
+
+function Image({ reservation }) {
+  return (
+    <Box sx={{ flexShrink: 0 }}>
+      <img
+        className="reservation-image"
+        src={reservation.productImageURL}
+        alt={reservation.productName}
+      />
+    </Box>
+  );
+}
+
+function UserDetails({ reservation }) {
+  return (
+    <Stack spacing={1}>
+      <Typography>
+        {reservation.accountFirstName} {reservation.accountLastName}
+      </Typography>
+      <Typography>{reservation.accountEmail}</Typography>
+      <Typography>{reservation.accountPhone}</Typography>
+    </Stack>
+  );
+}
