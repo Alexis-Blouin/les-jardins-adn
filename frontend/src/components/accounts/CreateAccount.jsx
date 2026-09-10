@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Link as RouterLink } from "react-router-dom";
 import toast from "react-simple-toasts";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +18,8 @@ import FormPaper from "../FormPaper";
 
 function CreateAccount({ user }) {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   console.log("CreateAccount");
 
@@ -30,6 +36,22 @@ function CreateAccount({ user }) {
     // Validate the phone number if provided
     if (phone && !validator.isMobilePhone(phone, ["en-CA", "en-US"])) {
       toast("Le numéro de téléphone n'est pas valide", { theme: "failure" });
+      return;
+    }
+
+    if (
+      !validator.isStrongPassword(password, {
+        minLength: 8,
+        minUppercase: 1,
+        minLowercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+    ) {
+      toast(
+        "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial",
+        { theme: "failure" },
+      );
       return;
     }
 
@@ -73,14 +95,54 @@ function CreateAccount({ user }) {
           <TextField
             id="password"
             label="Mot de passe"
-            type="password"
+            type={showPassword ? "text" : "password"}
             required
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={
+                        showPassword
+                          ? "Masquer le mot de passe"
+                          : "Afficher le mot de passe"
+                      }
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
           />
           <TextField
             id="confirmPassword"
             label="Confirmer le mot de passe"
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             required
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={
+                        showConfirmPassword
+                          ? "Masquer la confirmation du mot de passe"
+                          : "Afficher la confirmation du mot de passe"
+                      }
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
           />
           <Button
             form="createAccount"
