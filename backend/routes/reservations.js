@@ -31,7 +31,8 @@ router.get("/getAll", authenticate, async (req, res) => {
       p.productName, p.productPrice, p.productPriceUnit, p.productImageURL
       from reservations r
       join accounts a on r.accountId = a.accountId
-      join products p on r.productId = p.productId`,
+      join products p on r.productId = p.productId
+      order by reservationPickupTime`,
     );
 
     res.json(rows);
