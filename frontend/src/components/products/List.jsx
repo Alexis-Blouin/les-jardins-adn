@@ -68,11 +68,11 @@ function List({
                 {user &&
                   (user.accountIsAdmin ? (
                     <EditSquareIcon onClick={() => handleModifyOpen(product)} />
-                  ) : (
+                  ) : product.productIsAvailable ? (
                     <BookmarkAddIcon
                       onClick={() => handleAddReservationOpen(product)}
                     />
-                  ))}
+                  ) : null)}
               </Stack>
               <Typography variant="body1">
                 {product.productDescription}
