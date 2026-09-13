@@ -9,7 +9,13 @@ import { useState } from "react";
 import Add from "../reservations/Add";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 
-function List({ products, setProducts, setReservations, user }) {
+function List({
+  products,
+  setProducts,
+  setReservations,
+  setAllReservations,
+  user,
+}) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modifyOpen, setModifyOpen] = useState(false);
   const [addReservationOpen, setAddReservationOpen] = useState(false);
@@ -99,8 +105,10 @@ function List({ products, setProducts, setReservations, user }) {
       <Add
         product={selectedProduct}
         setReservations={setReservations}
+        setAllReservations={setAllReservations}
         open={addReservationOpen}
         handleClose={handleAddReservationClose}
+        user={user}
       />
     </Box>
   );
