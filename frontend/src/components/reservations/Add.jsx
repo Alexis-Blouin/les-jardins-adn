@@ -14,7 +14,14 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-function Add({ product, setReservations, open, handleClose }) {
+function Add({
+  product,
+  setReservations,
+  setAllReservations,
+  open,
+  handleClose,
+  user,
+}) {
   const [productName, setProductName] = useState("");
   const [quantity, setQuantity] = useState(null);
   const [pickupTime, setPickupTime] = useState(null);
@@ -46,13 +53,33 @@ function Add({ product, setReservations, open, handleClose }) {
 
       const newReservation = {
         reservationId: res.data.reservationId,
-        quantity: quantity,
-        pickupTime: pickupTime,
+        accountEmail: user.accountEmail,
+        accountFirstName: user.accountFirstName,
+        accountLastName: user.accountLastName,
+        accountPhone: user.accountPhone,
+        productName: productName,
+        productPrice: product.productPrice,
+        productPriceUnit: product.productPriceUnit,
+        productImageURL: product.productImageURL,
+        reservationQuantity: quantity,
+        reservationPickupTime: pickupTime,
       };
-      setReservations((prevReservations) => [
-        ...prevReservations,
-        newReservation,
-      ]);
+      // Add the reservation to the lists and sort by pickup time
+      setReservations((prevReservations) =>
+        [...prevReservations, newReservation].sort(
+          (a, b) =>
+            new Date(a.reservationPickupTime) -
+            new Date(b.reservationPickupTime),
+        ),
+      );
+
+      setAllReservations((prevAllReservations) =>
+        [...prevAllReservations, newReservation].sort(
+          (a, b) =>
+            new Date(a.reservationPickupTime) -
+            new Date(b.reservationPickupTime),
+        ),
+      );
 
       toast(res.data.message, { theme: "success" });
 

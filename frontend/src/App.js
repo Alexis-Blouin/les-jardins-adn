@@ -355,6 +355,7 @@ function AppContent({ isDark, setIsDark }) {
                   products={products}
                   setProducts={setProducts}
                   setReservations={setReservations}
+                  setAllReservations={setAllReservations}
                   user={user}
                 />
               }
