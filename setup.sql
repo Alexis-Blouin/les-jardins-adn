@@ -1,7 +1,7 @@
 CREATE TABLE `products` (
   `productId` int NOT NULL AUTO_INCREMENT,
   `productName` varchar(255) NOT NULL,
-  `productDescription` varchar(255) NOT NULL,
+  `productDescription` text NOT NULL,
   `productImageURL` varchar(255) NOT NULL,
   `productImagePublicId` varchar(255) NOT NULL,
   `productIsAvailable` tinyint(1) NOT NULL,
@@ -33,4 +33,13 @@ CREATE TABLE `reservations` (
   KEY `fk_productId` (`productId`),
   CONSTRAINT `fk_accountId` FOREIGN KEY (`accountId`) REFERENCES `accounts` (`accountId`),
   CONSTRAINT `fk_productId` FOREIGN KEY (`productId`) REFERENCES `products` (`productId`)
+)
+
+CREATE TABLE `publications` (
+  `publicationId` int NOT NULL AUTO_INCREMENT,
+  `publicationTitle` varchar(255) NOT NULL,
+  `publicationContent` text,
+  `publicationImageURL` varchar(255) NOT NULL,
+  `publicationImagePublicId` varchar(255) NOT NULL,
+  PRIMARY KEY (`publicationId`)
 )

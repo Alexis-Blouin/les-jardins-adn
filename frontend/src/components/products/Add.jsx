@@ -106,6 +106,8 @@ function Add({ setProducts }) {
             onChange={(e) => setName(e.target.value)}
           />
           <TextField
+            multiline
+            minRows={2}
             id="description"
             name="description"
             label="Description"
