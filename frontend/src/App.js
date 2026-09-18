@@ -25,8 +25,10 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
 import logo_adn from "./images/logo.jpg";
 import ProductsList from "./components/products/List";
+import PublicationsList from "./components/publications/List";
 import Landing from "./components/Landing";
-import Add from "./components/products/Add";
+import AddProduct from "./components/products/Add";
+import AddPublication from "./components/publications/Add";
 import useAuth, { AuthProvider } from "./hooks/useAuth";
 import Profile from "./components/accounts/Profile";
 import CreateAccount from "./components/accounts/CreateAccount";
@@ -115,13 +117,21 @@ function AppContent({ isDark, setIsDark }) {
   const [products, setProducts] = useState([]);
   const [reservations, setReservations] = useState([]);
   const [allReservations, setAllReservations] = useState([]);
+  const [publications, setPublications] = useState([]);
 
   const { user } = useAuth();
 
-  const pages = [{ name: "Produits", path: "/produits" }];
+  const pages = [
+    { name: "Produits", path: "/produits" },
+    { name: "Publications", path: "/publications" },
+  ];
   if (user) {
     if (user.accountIsAdmin) {
-      pages.push({ name: "Ajouter", path: "/ajouter" });
+      pages.push({ name: "Ajouter produit", path: "/produits/ajouter" });
+      pages.push({
+        name: "Ajouter publication",
+        path: "/publications/ajouter",
+      });
       pages.push({ name: "Réservations", path: "/reservations" });
     } else {
       pages.push({ name: "Mes réservations", path: "/mes-reservations" });
@@ -151,6 +161,11 @@ function AppContent({ isDark, setIsDark }) {
     axios
       .get(`${API_URL}/reservations/getAll`)
       .then((res) => setAllReservations(res.data))
+      .catch((err) => console.log(err));
+
+    axios
+      .get(`${API_URL}/publications/get`)
+      .then((res) => setPublications(res.data))
       .catch((err) => console.log(err));
   }, [user]);
 
@@ -361,10 +376,28 @@ function AppContent({ isDark, setIsDark }) {
               }
             />
             <Route
-              path="/ajouter"
+              path="/publications"
+              element={
+                <PublicationsList
+                  publications={publications}
+                  setPublications={setPublications}
+                  user={user}
+                />
+              }
+            />
+            <Route
+              path="/produits/ajouter"
               element={
                 <ProtectedRoute>
-                  <Add setProducts={setProducts} />
+                  <AddProduct setProducts={setProducts} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/publications/ajouter"
+              element={
+                <ProtectedRoute>
+                  <AddPublication setPublications={setPublications} />
                 </ProtectedRoute>
               }
             />

@@ -37,7 +37,8 @@
   }
 }
 
-.product-image {
+.product-image,
+.publication-image {
   max-width: 100%;
   height: auto;
   border-radius: 4px;
