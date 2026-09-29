@@ -26,6 +26,12 @@ function Landing() {
           Côtier. Aux Jardins ADN nous cultivons naturellement tout nos fruits
           et légumes offert aux consommateurs. Mangez vrai, mangez frais!
         </Typography>
+        <video
+          controls
+          width="100%"
+          style={{ border: 0, borderRadius: 8 }}
+          src={process.env.REACT_APP_FARM_VIDEO_URL}
+        />
         <Typography variant="h4" sx={{ textAlign: "center" }}>
           Où sommes nous?
         </Typography>
