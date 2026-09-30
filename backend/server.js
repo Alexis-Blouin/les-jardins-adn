@@ -39,12 +39,14 @@ const productsRoutes = require("./routes/products");
 const accountsRoutes = require("./routes/accounts");
 const reservationsRoutes = require("./routes/reservations");
 const publicationsRoutes = require("./routes/publications");
+const configRoutes = require("./routes/config");
 
 // use routes
 app.use("/products", productsRoutes);
 app.use("/accounts", accountsRoutes);
 app.use("/reservations", reservationsRoutes);
 app.use("/publications", publicationsRoutes);
+app.use("/config", configRoutes);
 
 const port = process.env.LISTENING_PORT || 8081;
 

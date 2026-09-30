@@ -1,30 +1,28 @@
+import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { useState } from "react";
+import LandingForm from "./LandingForm";
 
-function Landing() {
+function Landing({ user, landingPageContent, setLandingPageContent }) {
+  const [editLandingPageOpen, setEditLandingPageOpen] = useState(false);
+
   return (
     <Box sx={{ p: 2, maxWidth: "sm", margin: "0 auto" }}>
       <Stack direction="column" spacing={2}>
+        {landingPageContent.map((section, index) => (
+          <Box key={index}>
+            <Typography variant="h4" sx={{ textAlign: "center" }}>
+              {section.title}
+            </Typography>
+            <Typography variant="body1" sx={{ textAlign: "justify" }}>
+              {section.text}
+            </Typography>
+          </Box>
+        ))}
         <Typography variant="h4" sx={{ textAlign: "center" }}>
-          Bienvenue aux Jardins ADN
-        </Typography>
-        <Typography variant="body1" sx={{ textAlign: "justify" }}>
-          Nous sommes situé à Sept-Îles, dans la région de la Côte-Nord. Nous
-          offrons une variété de produits frais et locaux, cultivés avec soin et
-          passion. Explorez notre site pour découvrir nos produits et en savoir
-          plus sur notre ferme.
-        </Typography>
-        <Typography variant="h4" sx={{ textAlign: "center" }}>
-          À propos
-        </Typography>
-        <Typography variant="body1" sx={{ textAlign: "justify" }}>
-          Biodynamie: est une manière d’améliorer la terre avec le travail des
-          animaux de la ferme. Renourir le sol grâce aux fientes et travail des
-          volailles et autres espèces donne aux Jardins une fertilisation
-          naturelle. Les anciens savaient comment fertiliser nos sols Nord
-          Côtier. Aux Jardins ADN nous cultivons naturellement tout nos fruits
-          et légumes offert aux consommateurs. Mangez vrai, mangez frais!
+          Maraîchage nordique
         </Typography>
         <video
           controls
@@ -49,7 +47,23 @@ function Landing() {
             referrerPolicy="strict-origin-when-cross-origin"
           ></iframe>
         </Box>
+        {user && user.accountIsAdmin === 1 && (
+          <Button
+            variant="contained"
+            onClick={() => setEditLandingPageOpen(true)}
+            width="100%"
+          >
+            Modifier l'accueil
+          </Button>
+        )}
       </Stack>
+
+      <LandingForm
+        landingPageContent={landingPageContent}
+        setLandingPageContent={setLandingPageContent}
+        open={editLandingPageOpen}
+        setOpen={setEditLandingPageOpen}
+      />
     </Box>
   );
 }

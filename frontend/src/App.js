@@ -26,7 +26,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import logo_adn from "./images/logo.jpg";
 import ProductsList from "./components/products/List";
 import PublicationsList from "./components/publications/List";
-import Landing from "./components/Landing";
+import Landing from "./components/landing/Landing";
 import AddProduct from "./components/products/Add";
 import AddPublication from "./components/publications/Add";
 import useAuth, { AuthProvider } from "./hooks/useAuth";
@@ -118,6 +118,7 @@ function AppContent({ isDark, setIsDark }) {
   const [reservations, setReservations] = useState([]);
   const [allReservations, setAllReservations] = useState([]);
   const [publications, setPublications] = useState([]);
+  const [landingPageContent, setLandingPageContent] = useState([]);
 
   const { user } = useAuth();
 
@@ -166,6 +167,11 @@ function AppContent({ isDark, setIsDark }) {
     axios
       .get(`${API_URL}/publications/get`)
       .then((res) => setPublications(res.data))
+      .catch((err) => console.log(err));
+
+    axios
+      .get(`${API_URL}/config/getLandingPageContent`)
+      .then((res) => setLandingPageContent(res.data[0].landingPageContent))
       .catch((err) => console.log(err));
   }, [user]);
 
@@ -362,7 +368,16 @@ function AppContent({ isDark, setIsDark }) {
         </AppBar>
         <Box sx={{ flex: 1 }}>
           <Routes>
-            <Route path="/" element={<Landing />} />
+            <Route
+              path="/"
+              element={
+                <Landing
+                  user={user}
+                  landingPageContent={landingPageContent}
+                  setLandingPageContent={setLandingPageContent}
+                />
+              }
+            />
             <Route
               path="/produits"
               element={
