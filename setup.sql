@@ -43,3 +43,9 @@ CREATE TABLE `publications` (
   `publicationImagePublicId` varchar(255) NOT NULL,
   PRIMARY KEY (`publicationId`)
 )
+
+CREATE TABLE `config` (
+  `configId` int NOT NULL AUTO_INCREMENT,
+  `landingPageContent` json NOT NULL,
+  PRIMARY KEY (`configId`)
+)
