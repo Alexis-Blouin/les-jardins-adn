@@ -210,16 +210,21 @@ function AppContent({ isDark, setIsDark }) {
           <Container maxWidth="xl">
             <Toolbar disableGutters>
               <Box
-                component="img"
-                src={logo_adn}
-                alt="Logo"
+                component={Link}
+                to="/"
                 sx={{
-                  width: "40px",
-                  height: "40px",
-                  marginRight: "16px",
                   display: { xs: "none", md: "flex" },
+                  alignItems: "center",
+                  mr: 2,
                 }}
-              />
+              >
+                <Box
+                  component="img"
+                  src={logo_adn}
+                  alt="Logo"
+                  sx={{ width: "40px", height: "40px" }}
+                />
+              </Box>
               <Typography
                 variant="h6"
                 noWrap
@@ -280,16 +285,21 @@ function AppContent({ isDark, setIsDark }) {
                 </Menu>
               </Box>
               <Box
-                component="img"
-                src={logo_adn}
-                alt="Logo"
+                component={Link}
+                to="/"
                 sx={{
-                  width: "40px",
-                  height: "40px",
-                  marginRight: "16px",
                   display: { xs: "flex", md: "none" },
+                  alignItems: "center",
+                  mr: 2,
                 }}
-              />
+              >
+                <Box
+                  component="img"
+                  src={logo_adn}
+                  alt="Logo"
+                  sx={{ width: "40px", height: "40px" }}
+                />
+              </Box>
               <Typography
                 variant="h5"
                 noWrap
