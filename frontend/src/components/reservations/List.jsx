@@ -91,34 +91,45 @@ function List({
           label="Réservations futures"
         />
       </FormGroup>
-      {visibleGroups.past && pastReservations.length > 0 && (
-        <ReservationsPack
-          title="Réservations passées"
-          reservations={pastReservations}
-          isAdmin={isAdmin}
-          mt={2}
-        />
-      )}
-      {visibleGroups.today && todayReservations.length > 0 && (
-        <ReservationsPack
-          title="Réservations d'aujourd'hui"
-          reservations={todayReservations}
-          isAdmin={isAdmin}
-        />
-      )}
-      {visibleGroups.next7Days && next7DaysReservations.length > 0 && (
-        <ReservationsPack
-          title="Réservations dans les 7 prochains jours"
-          reservations={next7DaysReservations}
-          isAdmin={isAdmin}
-        />
-      )}
-      {visibleGroups.future && futureReservations.length > 0 && (
-        <ReservationsPack
-          title="Réservations futures"
-          reservations={futureReservations}
-          isAdmin={isAdmin}
-        />
+      {(!visibleGroups.past || pastReservations.length === 0) &&
+      (!visibleGroups.today || todayReservations.length === 0) &&
+      (!visibleGroups.next7Days || next7DaysReservations.length === 0) &&
+      (!visibleGroups.future || futureReservations.length === 0) ? (
+        <Typography sx={{ mt: 2 }} variant="h6">
+          Aucune réservation à afficher.
+        </Typography>
+      ) : (
+        <>
+          {visibleGroups.past && pastReservations.length > 0 && (
+            <ReservationsPack
+              title="Réservations passées"
+              reservations={pastReservations}
+              isAdmin={isAdmin}
+              mt={2}
+            />
+          )}
+          {visibleGroups.today && todayReservations.length > 0 && (
+            <ReservationsPack
+              title="Réservations d'aujourd'hui"
+              reservations={todayReservations}
+              isAdmin={isAdmin}
+            />
+          )}
+          {visibleGroups.next7Days && next7DaysReservations.length > 0 && (
+            <ReservationsPack
+              title="Réservations dans les 7 prochains jours"
+              reservations={next7DaysReservations}
+              isAdmin={isAdmin}
+            />
+          )}
+          {visibleGroups.future && futureReservations.length > 0 && (
+            <ReservationsPack
+              title="Réservations futures"
+              reservations={futureReservations}
+              isAdmin={isAdmin}
+            />
+          )}
+        </>
       )}
     </Box>
   );
