@@ -5,9 +5,12 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Modify from "./Modify";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Add from "../reservations/Add";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 function List({
   products,
@@ -19,6 +22,15 @@ function List({
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modifyOpen, setModifyOpen] = useState(false);
   const [addReservationOpen, setAddReservationOpen] = useState(false);
+  const [seeHiddenProducts, setSeeHiddenProducts] = useState(false);
+  const [showingProducts, setShowingProducts] = useState([]);
+
+  useEffect(() => {
+    setShowingProducts(
+      products.filter((product) => product.productHidden == seeHiddenProducts),
+    );
+    console.log("seeHiddenProducts", seeHiddenProducts);
+  }, [products, seeHiddenProducts]);
 
   // Toggles to open of close the modify and reserve modal
   // Also sets the product once opened
@@ -44,6 +56,19 @@ function List({
 
   return (
     <Box sx={{ p: 2, maxWidth: "xl", margin: "0 auto" }}>
+      {user && user.accountIsAdmin ? (
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={seeHiddenProducts}
+                onChange={(e) => setSeeHiddenProducts(e.target.checked)}
+              />
+            }
+            label="Voir les produits désactivés"
+          />
+        </FormGroup>
+      ) : null}
       <Masonry
         columns={{
           xs: 1,
@@ -52,9 +77,9 @@ function List({
           lg: 4,
         }}
         spacing={2}
-        sx={{ ml: 0 }}
+        sx={{ ml: 0, mt: 2 }}
       >
-        {products.map((product) => (
+        {showingProducts.map((product) => (
           <Paper>
             <Stack direction="column" spacing={2} sx={{ p: 2 }}>
               <Stack
@@ -77,7 +102,9 @@ function List({
               <Typography variant="body1">
                 {product.productDescription}
               </Typography>
-              {product.productIsAvailable ? (
+              {product.productHidden ? (
+                <Typography variant="body1">Désactivé</Typography>
+              ) : product.productIsAvailable ? (
                 <Typography variant="body1">
                   Disponible à {Number(product.productPrice).toFixed(2)}${" / "}
                   {product.productPriceUnit}

@@ -21,7 +21,7 @@ router.get("/get", async (req, res) => {
   try {
     const [rows] = await db.query(
       `select productId, productName, productDescription, productImageURL, productImagePublicId,
-      productIsAvailable, productPrice, productPriceUnit
+      productIsAvailable, productHidden, productPrice, productPriceUnit
       from products`,
     );
     res.json(rows);
@@ -44,7 +44,7 @@ router.post(
       const productIsAvailable = req.body.productIsAvailable;
       const productPrice = req.body.productPrice;
       const productPriceUnit = req.body.productPriceUnit;
-
+      const productHidden = req.body.productHidden;
       const product = await selectOneProduct(productName);
       // TODO maybe we don't care if there are two product with the same name
       if (product) {
@@ -74,13 +74,14 @@ router.post(
         // Insert the product into the database with the image URL
         const [productsResult] = await db.query(
           `insert into products (productName, productDescription, productImageURL, productImagePublicId,
-          productIsAvailable, productPrice, productPriceUnit) values (?, ?, ?, ?, ?, ?, ?)`,
+          productIsAvailable, productHidden, productPrice, productPriceUnit) values (?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             productName,
             productDescription,
             productImageURL,
             productImagePublicId,
             productIsAvailable,
+            productHidden,
             productPrice,
             productPriceUnit,
           ],
@@ -115,6 +116,7 @@ router.patch(
       const productOldImagePublicId = req.body.productImagePublicId;
       const productImage = req.file ?? null;
       const productIsAvailable = req.body.productIsAvailable;
+      const productHidden = req.body.productHidden;
       const productPrice = req.body.productPrice;
       const productPriceUnit = req.body.productPriceUnit;
 
@@ -154,13 +156,14 @@ router.patch(
 
       await db.query(
         `update products set productName = ?, productDescription = ?, productImageURL = ?, productImagePublicId = ?,
-        productIsAvailable = ?, productPrice = ?, productPriceUnit = ? where productId = ?`,
+        productIsAvailable = ?, productHidden = ?, productPrice = ?, productPriceUnit = ? where productId = ?`,
         [
           productName,
           productDescription,
           productNewImageURL,
           productNewImagePublicId,
           productIsAvailable,
+          productHidden,
           productPrice,
           productPriceUnit,
           productId,

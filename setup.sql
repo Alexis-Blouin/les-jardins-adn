@@ -7,6 +7,7 @@ CREATE TABLE `products` (
   `productIsAvailable` tinyint(1) NOT NULL,
   `productPrice` decimal(6,2) NOT NULL,
   `productPriceUnit` varchar(50) NOT NULL,
+  `productHidden` tinyint(1) NOT NULL,
   PRIMARY KEY (`productId`)
 )
 

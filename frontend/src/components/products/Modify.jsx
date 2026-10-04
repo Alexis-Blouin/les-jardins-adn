@@ -27,6 +27,7 @@ function Modify({ product, setProducts, open, handleClose }) {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isAvailable, setIsAvailable] = useState(true);
+  const [hidden, setHidden] = useState(false);
   const [price, setPrice] = useState(null);
   const [priceUnit, setPriceUnit] = useState("");
   const [disabled, setDisabled] = useState(false);
@@ -44,6 +45,7 @@ function Modify({ product, setProducts, open, handleClose }) {
       setProductImagePublicId(product.productImagePublicId);
       setImagePreview(product.productImageURL);
       setIsAvailable(product.productIsAvailable);
+      setHidden(product.productHidden);
       setPrice(product.productPrice);
       setPriceUnit(product.productPriceUnit);
     }
@@ -61,6 +63,7 @@ function Modify({ product, setProducts, open, handleClose }) {
     formData.append("productImageURL", imageURL);
     formData.append("productImagePublicId", imagePublicId); // Include the current image public id for deletion
     formData.append("productIsAvailable", isAvailable ? 1 : 0);
+    formData.append("productHidden", hidden ? 1 : 0);
     formData.append("productPrice", price);
     formData.append("productPriceUnit", priceUnit);
 
@@ -87,6 +90,7 @@ function Modify({ product, setProducts, open, handleClose }) {
         productImageURL: res.data.productImageURL,
         productImagePublicId: res.data.productImagePublicId,
         productIsAvailable: isAvailable,
+        productHidden: hidden,
         productPrice: price,
         productPriceUnit: priceUnit,
       };
@@ -107,6 +111,7 @@ function Modify({ product, setProducts, open, handleClose }) {
       setImageFile(null);
       setImagePreview(null);
       setIsAvailable(true);
+      setHidden(false);
       setPrice(0.0);
       setPriceUnit("");
     } catch (err) {
@@ -128,14 +133,7 @@ function Modify({ product, setProducts, open, handleClose }) {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{ justifyContent: "space-between" }}
-        >
-          <Box>Modifier {originalName}</Box>
-          <DeleteForeverIcon onClick={handleDeleteOpen} />
-        </Stack>
+        <Box>Modifier {originalName}</Box>
       </DialogTitle>
       <DialogContent style={{ paddingTop: "5px" }}>
         <Box sx={{ p: 2, maxWidth: "sm", margin: "0 auto" }}>
@@ -168,6 +166,17 @@ function Modify({ product, setProducts, open, handleClose }) {
                     />
                   }
                   label="Disponible"
+                />
+              </FormGroup>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={hidden}
+                      onChange={(e) => setHidden(e.target.checked)}
+                    />
+                  }
+                  label="Désactivé"
                 />
               </FormGroup>
               <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
