@@ -33,6 +33,7 @@ function Add({ setProducts }) {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isAvailable, setIsAvailable] = useState(true);
+  const [hidden, setHidden] = useState(false);
   const [price, setPrice] = useState(null);
   const [priceUnit, setPriceUnit] = useState("");
   const [disabled, setDisabled] = useState(false);
@@ -47,6 +48,7 @@ function Add({ setProducts }) {
     formData.append("productDescription", description);
     formData.append("productImage", imageFile, imageFile.name);
     formData.append("productIsAvailable", isAvailable ? 1 : 0);
+    formData.append("productHidden", hidden ? 1 : 0);
     formData.append("productPrice", price);
     formData.append("productPriceUnit", priceUnit);
 
@@ -69,6 +71,7 @@ function Add({ setProducts }) {
         productImageURL: res.data.productImageURL,
         productImagePublicId: res.data.productImagePublicId,
         productIsAvailable: isAvailable,
+        productHidden: hidden,
         productPrice: price,
         productPriceUnit: priceUnit,
       };
@@ -83,6 +86,7 @@ function Add({ setProducts }) {
       setImageFile(null);
       setImagePreview(null);
       setIsAvailable(true);
+      setHidden(false);
       setPrice(0.0);
       setPriceUnit("");
     } catch (err) {
@@ -125,6 +129,17 @@ function Add({ setProducts }) {
                 />
               }
               label="Disponible"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={hidden}
+                  onChange={(e) => setHidden(e.target.checked)}
+                />
+              }
+              label="Désactivé"
             />
           </FormGroup>
           <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
