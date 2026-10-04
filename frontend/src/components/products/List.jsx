@@ -29,7 +29,6 @@ function List({
     setShowingProducts(
       products.filter((product) => product.productHidden == seeHiddenProducts),
     );
-    console.log("seeHiddenProducts", seeHiddenProducts);
   }, [products, seeHiddenProducts]);
 
   // Toggles to open of close the modify and reserve modal
