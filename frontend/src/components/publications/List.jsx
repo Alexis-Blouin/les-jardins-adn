@@ -46,11 +46,11 @@ function List({ publications, setPublications, user }) {
                 <Typography variant="h4" component="h1">
                   {publication.publicationTitle}
                 </Typography>
-                {user && user.accountIsAdmin && (
+                {user && user.accountIsAdmin ? (
                   <EditSquareIcon
                     onClick={() => handleModifyOpen(publication)}
                   />
-                )}
+                ) : null}
               </Stack>
               <Typography variant="body1">
                 {publication.publicationContent}
