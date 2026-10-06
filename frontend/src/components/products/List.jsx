@@ -29,7 +29,6 @@ function List({
     setShowingProducts(
       products.filter((product) => product.productHidden == seeHiddenProducts),
     );
-    console.log("seeHiddenProducts", seeHiddenProducts);
   }, [products, seeHiddenProducts]);
 
   // Toggles to open of close the modify and reserve modal
@@ -57,7 +56,7 @@ function List({
   return (
     <Box sx={{ p: 2, maxWidth: "xl", margin: "0 auto" }}>
       {user && user.accountIsAdmin ? (
-        <FormGroup>
+        <FormGroup sx={{ mb: 2 }}>
           <FormControlLabel
             control={
               <Checkbox
@@ -77,7 +76,7 @@ function List({
           lg: 4,
         }}
         spacing={2}
-        sx={{ ml: 0, mt: 2 }}
+        sx={{ ml: 0 }}
       >
         {showingProducts.map((product) => (
           <Paper>

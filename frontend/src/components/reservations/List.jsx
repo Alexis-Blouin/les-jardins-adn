@@ -17,7 +17,7 @@ function List({
   isAdmin = false,
 }) {
   const [visibleGroups, setVisibleGroups] = useState({
-    past: true,
+    past: false,
     today: true,
     next7Days: true,
     future: true,
