@@ -31,6 +31,20 @@ function Landing({ user, landingPageContent, setLandingPageContent }) {
           src={process.env.REACT_APP_FARM_VIDEO_URL}
         />
         <Typography variant="h4" sx={{ textAlign: "center" }}>
+          Une petite chanson
+        </Typography>
+        <iframe
+          width="100%"
+          height="315"
+          style={{ border: 0, borderRadius: 8 }}
+          src="https://www.youtube.com/embed/OY2D8dUK1zs?si=cbNgQEKnYueW9ZEw"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+        <Typography variant="h4" sx={{ textAlign: "center" }}>
           Où sommes nous?
         </Typography>
         <Typography variant="body1" sx={{ textAlign: "center" }}>
