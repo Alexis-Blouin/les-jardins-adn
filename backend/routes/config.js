@@ -7,7 +7,7 @@ const authenticate = require("../middleware/authenticate");
 router.get("/getLandingPageContent", async (req, res) => {
   try {
     const [rows] = await db.query(
-      `select landingPageContent from config where configId = 1`,
+      `select landingPageContent, openingHours from config where configId = 1`,
     );
     res.json(rows);
   } catch (err) {
@@ -18,11 +18,11 @@ router.get("/getLandingPageContent", async (req, res) => {
 
 // Update the landing page content
 router.put("/updateLandingPageContent", authenticate, async (req, res) => {
-  const { landingPageContent } = req.body;
+  const { landingPageContent, openingHours } = req.body;
   try {
     await db.query(
-      `update config set landingPageContent = ? where configId = 1`,
-      [JSON.stringify(landingPageContent)],
+      `update config set landingPageContent = ?, openingHours = ? where configId = 1`,
+      [JSON.stringify(landingPageContent), JSON.stringify(openingHours)],
     );
     res.json({ message: "Landing page content updated successfully" });
   } catch (err) {

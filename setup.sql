@@ -48,5 +48,6 @@ CREATE TABLE `publications` (
 CREATE TABLE `config` (
   `configId` int NOT NULL AUTO_INCREMENT,
   `landingPageContent` json NOT NULL,
+  `openingHours` json NOT NULL,
   PRIMARY KEY (`configId`)
 )
