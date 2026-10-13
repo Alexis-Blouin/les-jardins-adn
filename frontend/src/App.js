@@ -403,6 +403,7 @@ function AppContent({ isDark, setIsDark }) {
                   setReservations={setReservations}
                   setAllReservations={setAllReservations}
                   user={user}
+                  openingHours={openingHours}
                 />
               }
             />

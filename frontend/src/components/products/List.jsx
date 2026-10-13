@@ -18,6 +18,7 @@ function List({
   setReservations,
   setAllReservations,
   user,
+  openingHours,
 }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modifyOpen, setModifyOpen] = useState(false);
@@ -135,6 +136,7 @@ function List({
         open={addReservationOpen}
         handleClose={handleAddReservationClose}
         user={user}
+        openingHours={openingHours}
       />
     </Box>
   );

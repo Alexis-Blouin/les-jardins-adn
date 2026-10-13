@@ -13,15 +13,7 @@ function Landing({
   setOpeningHours,
 }) {
   const [editLandingPageOpen, setEditLandingPageOpen] = useState(false);
-  const workingDays = [
-    "Lundi",
-    "Mardi",
-    "Mercredi",
-    "Jeudi",
-    "Vendredi",
-    "Samedi",
-    "Dimanche",
-  ];
+  const workingDays = process.env.REACT_APP_WORKING_DAYS.split(",");
 
   const formatOpeningHours = (dayHours) => {
     const [start1, end1, start2, end2] = dayHours;
