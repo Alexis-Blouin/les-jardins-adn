@@ -119,6 +119,7 @@ function AppContent({ isDark, setIsDark }) {
   const [allReservations, setAllReservations] = useState([]);
   const [publications, setPublications] = useState([]);
   const [landingPageContent, setLandingPageContent] = useState([]);
+  const [openingHours, setOpeningHours] = useState([]);
 
   const { user } = useAuth();
 
@@ -171,7 +172,10 @@ function AppContent({ isDark, setIsDark }) {
 
     axios
       .get(`${API_URL}/config/getLandingPageContent`)
-      .then((res) => setLandingPageContent(res.data[0].landingPageContent))
+      .then((res) => {
+        setLandingPageContent(res.data[0].landingPageContent);
+        setOpeningHours(res.data[0].openingHours);
+      })
       .catch((err) => console.log(err));
   }, [user]);
 
@@ -385,6 +389,8 @@ function AppContent({ isDark, setIsDark }) {
                   user={user}
                   landingPageContent={landingPageContent}
                   setLandingPageContent={setLandingPageContent}
+                  openingHours={openingHours}
+                  setOpeningHours={setOpeningHours}
                 />
               }
             />
@@ -397,6 +403,7 @@ function AppContent({ isDark, setIsDark }) {
                   setReservations={setReservations}
                   setAllReservations={setAllReservations}
                   user={user}
+                  openingHours={openingHours}
                 />
               }
             />

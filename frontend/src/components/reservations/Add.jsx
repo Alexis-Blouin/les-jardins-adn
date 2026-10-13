@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 function Add({
   product,
@@ -21,11 +22,13 @@ function Add({
   open,
   handleClose,
   user,
+  openingHours,
 }) {
   const [productName, setProductName] = useState("");
   const [quantity, setQuantity] = useState(null);
   const [pickupTime, setPickupTime] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const workingDays = process.env.REACT_APP_WORKING_DAYS.split(",");
 
   // Update form fields when the product changes
   useEffect(() => {
@@ -40,6 +43,44 @@ function Add({
 
     const pickupTimeFormat = pickupTime.format("YYYY-MM-DD HH:mm:ss");
     const productId = product.productId;
+
+    // Validate the pickup time against the opening hours and at least tomorrow
+    const pickupDayId = pickupTime.day() === 0 ? 6 : pickupTime.day() - 1; // Adjust for Sunday being 0 in dayjs
+    const pickupDay = workingDays[pickupDayId];
+    const pickupHour = pickupTime.hour();
+    const pickupMinute = pickupTime.minute();
+
+    // Reservation must be at least tomorrow.
+    const tomorrow = dayjs().startOf("day").add(1, "day");
+
+    if (pickupTime.isBefore(tomorrow, "day")) {
+      toast("Veuillez choisir un moment de récupération à partir de demain", {
+        theme: "failure",
+      });
+      setDisabled(false);
+      return;
+    }
+
+    const pickupTimeString = pickupTime.format("HH:mm");
+    const validOpeningHours = openingHours[pickupDay];
+    // Check both opening periods.
+    const isWithinOpeningHours = [
+      [validOpeningHours[0], validOpeningHours[1]],
+      [validOpeningHours[2], validOpeningHours[3]],
+    ].some(([start, end]) => {
+      return (
+        start && end && pickupTimeString >= start && pickupTimeString < end
+      );
+    });
+
+    if (!isWithinOpeningHours) {
+      toast(
+        "Veuillez choisir un moment de récupération dans les heures d'ouverture",
+        { theme: "failure" },
+      );
+      setDisabled(false);
+      return;
+    }
 
     try {
       const res = await axios.post(
@@ -126,6 +167,7 @@ function Add({
                   label="Moment de récupération"
                   value={pickupTime}
                   onChange={(e) => setPickupTime(e)}
+                  ampm={false}
                 />
               </LocalizationProvider>
             </Stack>

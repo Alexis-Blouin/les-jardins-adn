@@ -5,8 +5,31 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import LandingForm from "./LandingForm";
 
-function Landing({ user, landingPageContent, setLandingPageContent }) {
+function Landing({
+  user,
+  landingPageContent,
+  setLandingPageContent,
+  openingHours,
+  setOpeningHours,
+}) {
   const [editLandingPageOpen, setEditLandingPageOpen] = useState(false);
+  const workingDays = process.env.REACT_APP_WORKING_DAYS.split(",");
+
+  const formatOpeningHours = (dayHours) => {
+    const [start1, end1, start2, end2] = dayHours;
+
+    const periods = [];
+
+    if (start1 && end1) {
+      periods.push(`${start1} à ${end1}`);
+    }
+
+    if (start2 && end2) {
+      periods.push(`${start2} à ${end2}`);
+    }
+
+    return periods.length > 0 ? periods.join(" et ") : "Fermé";
+  };
 
   return (
     <Box sx={{ p: 2, maxWidth: "sm", margin: "0 auto" }}>
@@ -31,6 +54,20 @@ function Landing({ user, landingPageContent, setLandingPageContent }) {
           src={process.env.REACT_APP_FARM_VIDEO_URL}
         />
         <Typography variant="h4" sx={{ textAlign: "center" }}>
+          Une petite chanson
+        </Typography>
+        <iframe
+          width="100%"
+          height="315"
+          style={{ border: 0, borderRadius: 8 }}
+          src="https://www.youtube.com/embed/OY2D8dUK1zs?si=cbNgQEKnYueW9ZEw"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+        <Typography variant="h4" sx={{ textAlign: "center" }}>
           Où sommes nous?
         </Typography>
         <Typography variant="body1" sx={{ textAlign: "center" }}>
@@ -47,6 +84,15 @@ function Landing({ user, landingPageContent, setLandingPageContent }) {
             referrerPolicy="strict-origin-when-cross-origin"
           ></iframe>
         </Box>
+        <Typography variant="h4" sx={{ textAlign: "center" }}>
+          Nos heures d'ouverture
+        </Typography>
+        {openingHours["Lundi"] &&
+          workingDays.map((day) => (
+            <Typography>
+              <strong>{day} :</strong> {formatOpeningHours(openingHours[day])}
+            </Typography>
+          ))}
         {user && user.accountIsAdmin === 1 && (
           <Button
             variant="contained"
@@ -61,6 +107,9 @@ function Landing({ user, landingPageContent, setLandingPageContent }) {
       <LandingForm
         landingPageContent={landingPageContent}
         setLandingPageContent={setLandingPageContent}
+        openingHours={openingHours}
+        setOpeningHours={setOpeningHours}
+        workingDays={workingDays}
         open={editLandingPageOpen}
         setOpen={setEditLandingPageOpen}
       />
