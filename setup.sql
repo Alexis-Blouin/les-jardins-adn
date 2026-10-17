@@ -29,6 +29,7 @@ CREATE TABLE `reservations` (
   `productId` int NOT NULL,
   `reservationQuantity` decimal(5,1) NOT NULL,
   `reservationPickupTime` datetime NOT NULL,
+  `reservationCompleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`reservationId`),
   KEY `fk_accountId` (`accountId`),
   KEY `fk_productId` (`productId`),

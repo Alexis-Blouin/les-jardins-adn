@@ -7,7 +7,8 @@ router.get("/get", authenticate, async (req, res) => {
   try {
     // Query to get all the reservations and join the accounts and products tables
     const [rows] = await db.query(
-      `select r.reservationId, r.reservationQuantity, r.reservationPickupTime, a.accountEmail, p.productName, p.productPrice, p.productPriceUnit, p.productImageURL
+      `select r.reservationId, r.reservationQuantity, r.reservationPickupTime, r.reservationCompleted,
+      a.accountEmail, p.productName, p.productPrice, p.productPriceUnit, p.productImageURL
       from reservations r
       join accounts a on r.accountId = a.accountId
       join products p on r.productId = p.productId
@@ -26,7 +27,7 @@ router.get("/getAll", authenticate, async (req, res) => {
   try {
     // Query to get all the reservations and join the accounts and products tables
     const [rows] = await db.query(
-      `select r.reservationId, r.reservationQuantity, r.reservationPickupTime, 
+      `select r.reservationId, r.reservationQuantity, r.reservationPickupTime, r.reservationCompleted,
       a.accountEmail, a.accountFirstName, a.accountLastName, a.accountPhone, 
       p.productName, p.productPrice, p.productPriceUnit, p.productImageURL
       from reservations r
@@ -57,6 +58,25 @@ router.post("/add", authenticate, async (req, res) => {
       reservationId: reservationsResult.insertId,
       success: true,
       message: "La réservation est enregistrée",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
+router.patch("/complete", authenticate, async (req, res) => {
+  try {
+    const reservationId = req.body.reservationId;
+
+    const [result] = await db.query(
+      `update reservations set reservationCompleted = 1 where reservationId = ?`,
+      [reservationId],
+    );
+
+    res.json({
+      success: true,
+      message: "Réservation complétée avec succès",
     });
   } catch (err) {
     console.error(err);

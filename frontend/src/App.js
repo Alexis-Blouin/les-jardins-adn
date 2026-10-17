@@ -155,15 +155,17 @@ function AppContent({ isDark, setIsDark }) {
       .then((res) => setProducts(res.data))
       .catch((err) => console.log(err));
 
-    axios
-      .get(`${API_URL}/reservations/get`)
-      .then((res) => setReservations(res.data))
-      .catch((err) => console.log(err));
-
-    axios
-      .get(`${API_URL}/reservations/getAll`)
-      .then((res) => setAllReservations(res.data))
-      .catch((err) => console.log(err));
+    if (user && user.accountIsAdmin) {
+      axios
+        .get(`${API_URL}/reservations/getAll`)
+        .then((res) => setReservations(res.data))
+        .catch((err) => console.log(err));
+    } else {
+      axios
+        .get(`${API_URL}/reservations/get`)
+        .then((res) => setReservations(res.data))
+        .catch((err) => console.log(err));
+    }
 
     axios
       .get(`${API_URL}/publications/get`)
