@@ -54,7 +54,7 @@ function Landing({
           src={process.env.REACT_APP_FARM_VIDEO_URL}
         />
         <Typography variant="h4" sx={{ textAlign: "center" }}>
-          Une petite chanson
+          Hymne le bon sens paysan
         </Typography>
         <iframe
           width="100%"

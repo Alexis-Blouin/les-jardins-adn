@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -8,20 +9,17 @@ import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import "dayjs/locale/fr";
 import { useState } from "react";
+import Confirm from "./Confirm";
 
-function List({
-  reservations,
-  setReservations,
-  allReservations = [],
-  setAllReservations = [],
-  isAdmin = false,
-}) {
+function List({ reservations, setReservations, isAdmin = false }) {
   const [visibleGroups, setVisibleGroups] = useState({
     past: false,
     today: true,
     next7Days: true,
     future: true,
   });
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [reservationId, setReservationId] = useState(null);
 
   const handleGroupVisibilityChange = (group) => (event) => {
     setVisibleGroups((currentGroups) => ({
@@ -29,10 +27,6 @@ function List({
       [group]: event.target.checked,
     }));
   };
-
-  if (isAdmin && allReservations.length > 0) {
-    reservations = allReservations;
-  }
 
   // Filter the reservations to groups with 'past', 'today', '7 days' and 'future' classes
   const pastReservations = reservations.filter((r) =>
@@ -49,6 +43,16 @@ function List({
   const futureReservations = reservations.filter((r) =>
     dayjs(r.reservationPickupTime).isAfter(dayjs().add(7, "day"), "day"),
   );
+
+  const completeReservation = async (reservationId) => {
+    setReservationId(reservationId);
+    setConfirmOpen(true);
+  };
+
+  const handleConfirmClose = () => {
+    setConfirmOpen(false);
+    setReservationId(null);
+  };
 
   dayjs.locale("fr");
   return (
@@ -105,6 +109,7 @@ function List({
               title="Réservations passées"
               reservations={pastReservations}
               isAdmin={isAdmin}
+              completeReservation={completeReservation}
               mt={2}
             />
           )}
@@ -113,6 +118,7 @@ function List({
               title="Réservations d'aujourd'hui"
               reservations={todayReservations}
               isAdmin={isAdmin}
+              completeReservation={completeReservation}
             />
           )}
           {visibleGroups.next7Days && next7DaysReservations.length > 0 && (
@@ -120,6 +126,7 @@ function List({
               title="Réservations dans les 7 prochains jours"
               reservations={next7DaysReservations}
               isAdmin={isAdmin}
+              completeReservation={completeReservation}
             />
           )}
           {visibleGroups.future && futureReservations.length > 0 && (
@@ -127,17 +134,31 @@ function List({
               title="Réservations futures"
               reservations={futureReservations}
               isAdmin={isAdmin}
+              completeReservation={completeReservation}
             />
           )}
         </>
       )}
+
+      <Confirm
+        open={confirmOpen}
+        handleClose={handleConfirmClose}
+        reservationId={reservationId}
+        setReservations={setReservations}
+      />
     </Box>
   );
 }
 
 export default List;
 
-function ReservationsPack({ title, reservations, isAdmin, mt = 4 }) {
+function ReservationsPack({
+  title,
+  reservations,
+  isAdmin,
+  completeReservation,
+  mt = 4,
+}) {
   return (
     <>
       <Typography variant="h6" sx={{ mt: mt, mb: 2 }}>
@@ -165,6 +186,21 @@ function ReservationsPack({ title, reservations, isAdmin, mt = 4 }) {
                     "D MMMM YYYY [à] HH:mm",
                   )}
                 </Typography>
+                {!reservation.reservationCompleted ? (
+                  isAdmin && (
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={() =>
+                        completeReservation(reservation.reservationId)
+                      }
+                    >
+                      Compléter la réservation
+                    </Button>
+                  )
+                ) : (
+                  <Typography>Complétée</Typography>
+                )}
               </Stack>
               {isAdmin ? (
                 <UserDetails reservation={reservation} />
